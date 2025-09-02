@@ -1,37 +1,23 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "./api/apiClient";
+import { useQuery, useApolloClient } from "@apollo/client";
+import { GET_ARTICLES } from "./queries";
 
 const App = () => {
-    const [data, setData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await apiClient('/articles');
-                setData(data);
-            } catch (error) {
-                console.error("Failed to fetch articles:", error);
-                setError(error);
-            } finally {
-                // This ensures loading is set to false even if the fetch fails
-                setIsLoading(false);
-            }
-        }
-
-       fetchData().then(r => console.log(r));
-    }, []);
-
+    // The useQuery hook manages loading, error, and data states for you.
+    const { loading, error, data } = useQuery(GET_ARTICLES);
+    const client = useApolloClient();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         localStorage.removeItem('userToken');
+        // Clear the Apollo Client cache to remove all fetched data
+        await client.clearStore();
+        // Redirect to the login page
         navigate('/login');
     };
 
-    if (isLoading) {
+    if (loading) {
         return (
             <div className="bg-gray-900 min-h-screen flex items-center justify-center p-6 text-white font-sans">
                 <div className="text-center">
@@ -60,8 +46,8 @@ const App = () => {
             </div>
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {Array.isArray(data) && data.slice(0, 9).map((article) => (
-                        <div key={data.id} className="bg-gray-800 rounded-xl p-6 shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    {data && data.articles.map((article) => (
+                        <div key={article.id} className="bg-gray-800 rounded-xl p-6 shadow-lg transform transition-transform duration-300 hover:scale-105">
                             <h2 className="text-xl font-bold mb-2 text-indigo-300 capitalize">{article.title}</h2>
                             <p className="text-sm text-gray-400">{article.content}</p>
                         </div>
