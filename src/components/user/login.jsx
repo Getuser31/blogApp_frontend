@@ -28,25 +28,69 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h1>Login Page</h1>
-            <p>You need to log in to access the application.</p>
-            {/* Use the form's onSubmit event */}
-            <form onSubmit={handleLogin}>
-                <label>
-                    Email:
-                    <input type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </label>
-                <br />
-                <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Log In'}</button>
-            </form>
-            {/* Display an error message to the user if login fails */}
-            {error && <p style={{ color: 'red' }}>{error.message}</p>}
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
+            <div className="w-full max-w-md">
+                <div className="bg-gray-900/70 backdrop-blur rounded-2xl shadow-2xl border border-gray-800 p-8">
+                    <h1 className="text-3xl font-extrabold text-white text-center">Welcome back</h1>
+                    <p className="text-gray-400 text-center mt-2">Log in to access your account</p>
+
+                    {/* Use the form's onSubmit event */}
+                    <form onSubmit={handleLogin} className="mt-8 space-y-6">
+                        <div className="space-y-4">
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                                    Email
+                                </label>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2.5"
+                                    placeholder="you@example.com"
+                                    autoComplete="email"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                                    Password
+                                </label>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="mt-1 block w-full rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2.5"
+                                    placeholder="••••••••"
+                                    autoComplete="current-password"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {error && (
+                            <div className="rounded-md bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300">
+                                {error.message}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-2.5 text-white font-semibold transition-colors"
+                        >
+                            {loading ? 'Logging in…' : 'Log In'}
+                        </button>
+                    </form>
+                </div>
+                <p className="text-gray-500 text-center text-xs mt-6">
+                    Protected area • Please authenticate to continue
+                </p>
+            </div>
         </div>
     );
 };
