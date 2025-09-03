@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useApolloClient } from "@apollo/client";
-import { GET_ARTICLES } from "./queries";
+import { useQuery, useApolloClient } from "@apollo/client/react";
+import { GET_ARTICLES } from "./graphql/queries";
 
 const App = () => {
     // The useQuery hook manages loading, error, and data states for you.
@@ -30,7 +30,6 @@ const App = () => {
     if (error) {
         return (
             <div className="bg-gray-900 min-h-screen flex items-center justify-center p-6 text-red-400 font-sans">
-                {/* Display the error message, not the full error object */}
                 <p>Error: {error.message}</p>
             </div>
         );
@@ -46,7 +45,7 @@ const App = () => {
             </div>
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {data && data.articles.map((article) => (
+                    {data && data.articles.data.map((article) => (
                         <div key={article.id} className="bg-gray-800 rounded-xl p-6 shadow-lg transform transition-transform duration-300 hover:scale-105">
                             <h2 className="text-xl font-bold mb-2 text-indigo-300 capitalize">{article.title}</h2>
                             <p className="text-sm text-gray-400">{article.content}</p>

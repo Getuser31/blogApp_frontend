@@ -5,6 +5,7 @@ import { onError } from "@apollo/client/link/error";
 // Create an HTTP link to your GraphQL endpoint.
 const httpLink = createHttpLink({
     uri: import.meta.env.VITE_GRAPHQL_ENDPOINT,
+    credentials: "include",
 });
 
 // Create a middleware link to set the Authorization header on each request.
