@@ -17,3 +17,13 @@ export const GET_ARTICLES = gql`
         }
     }
 `;
+
+export const ME_QUERY = gql`
+     query Me {
+         me {
+             role {
+                 name
+             }
+         }
+     }
+ `;

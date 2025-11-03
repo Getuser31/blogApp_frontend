@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client/react';
 import { LOGIN_MUTATION } from "../../graphql/mutations";
+import {useAuth} from "../../AuthContext.jsx";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {login: authLogin} = useAuth()
 
     // The useMutation hook returns a function to trigger the mutation and an object with loading/error states.
     const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
-        // This function runs automatically on a successful mutation.
         onCompleted: (data) => {
-            localStorage.setItem('userToken', data.login.token);
+            // Pass the entire login payload to the auth context
+            // authLogin handles setting the token in localStorage
+            authLogin(data.login);
             navigate('/');
         },
         // This helps in debugging and can be used to show user-friendly errors.

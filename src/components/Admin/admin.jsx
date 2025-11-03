@@ -1,8 +1,11 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../AuthContext.jsx";
 
 const Admin = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    console.log(user)
 
     return (
         <div className="bg-gray-900 text-white min-h-screen font-sans p-8">
@@ -14,7 +17,9 @@ const Admin = () => {
                     >
                         Add Article
                     </li>
-                    <li className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer">
+                    <li className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer"
+                        onClick={() => navigate("/articles")}
+                    >
                         Edit Article
                     </li>
                 </ul>
