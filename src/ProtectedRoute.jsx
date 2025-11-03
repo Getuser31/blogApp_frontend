@@ -4,9 +4,8 @@ import { isAuthenticated } from "./utils/auth";
 const ProtectedRoute = ({children}) => {
     if(!isAuthenticated()) {
         return <Navigate to="/login" />
-    } else {
-        return children;
     }
+    return children;
 }
 
 export default ProtectedRoute

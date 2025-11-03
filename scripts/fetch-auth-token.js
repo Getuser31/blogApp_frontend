@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import 'dotenv/config';
+import { print } from 'graphql';
+import { LOGIN_MUTATION } from '../src/graphql/mutations.js';
 
 /**
  * This script programmatically logs in to the GraphQL API,
@@ -14,18 +16,12 @@ const main = async () => {
     const endpoint = process.env.VITE_GRAPHQL_ENDPOINT;
 
     if (!email || !password || !endpoint) {
-        console.error('Error: Please set VITE_TEST_USER_EMAIL, VITE_TEST_USER_PASSWORD, and VITE_GRAPHQL_ENDPOINT in your .env.development file.');
+        console.error('Error: Please set VITE_TEST_USER_EMAIL, VITE_TEST_USER_PASSWORD, and VITE_GRAPHQL_ENDPOINT in your .env file.');
         process.exit(1);
     }
 
     const loginMutation = {
-        query: `
-            mutation Login($email: String!, $password: String!) {
-                login(email: $email, password: $password) {
-                    token
-                }
-            }
-        `,
+        query: print(LOGIN_MUTATION),
         variables: { email, password },
     };
 

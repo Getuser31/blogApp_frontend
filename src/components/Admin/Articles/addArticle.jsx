@@ -1,0 +1,80 @@
+import React, { useState } from "react";
+import { useMutation } from '@apollo/client/react';
+import { useNavigate } from "react-router-dom";
+import { ADD_ARTICLE } from "../../../graphql/mutations";
+import { GET_ARTICLES } from "../../../graphql/queries";
+
+const AddArticle = () => {
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const navigate = useNavigate();
+
+    const [addArticle, { loading, error }] = useMutation(ADD_ARTICLE, {
+        refetchQueries: [{ query: GET_ARTICLES }],
+        onCompleted: () => {
+            // Redirect to the main page after successful submission
+            navigate("/");
+        },
+        onError: (error) => {
+            console.error("Error adding article:", error);
+        },
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!title || !content) {
+            // Basic validation
+            return;
+        }
+
+        addArticle({ variables: { title, content } });
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
+            <h1 className="text-4xl font-extrabold text-indigo-400 mb-8">Add New Article</h1>
+
+            <form onSubmit={handleSubmit} className="w-full max-w-2xl bg-gray-800 p-8 rounded-xl shadow-lg">
+                <div className="mb-6">
+                    <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-300">Title</label>
+                    <input
+                        id="title"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
+                        required
+                    />
+                </div>
+
+                <div className="mb-6">
+                    <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-300">Content</label>
+                    <textarea
+                        id="content"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        rows="6"
+                        className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
+                        required
+                    />
+                </div>
+
+                {error && (
+                    <div className="rounded-md bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300 mb-6">
+                        {error.message}
+                    </div>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-2.5 text-white font-semibold transition-colors"
+                >
+                    {loading ? "Submitting..." : "Add Article"}
+                </button>
+            </form>
+        </div>
+    );
+};
+
+export default AddArticle;

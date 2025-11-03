@@ -1,9 +1,11 @@
 import React from "react"
 import {useQuery} from "@apollo/client/react";
 import {GET_ARTICLES} from "../../graphql/queries.js";
+import {useNavigate} from "react-router-dom";
 
 const Articles = ({handleLogout}) => {
     const {loading, error, data} = useQuery(GET_ARTICLES);
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -29,6 +31,12 @@ const Articles = ({handleLogout}) => {
         <div className="bg-gray-900 text-white min-h-screen font-sans p-8">
             <div className="container mx-auto flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-extrabold text-indigo-400">Posts</h1>
+                <button
+                    onClick={() => navigate("/admin")}
+                    className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded transition-colors"
+                    >
+                    Admin
+                </button>
                 <button
                     onClick={handleLogout}
                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors"

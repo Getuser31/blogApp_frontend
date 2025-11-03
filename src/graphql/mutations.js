@@ -7,3 +7,13 @@ export const LOGIN_MUTATION = gql`
         }
     }
 `;
+
+export const ADD_ARTICLE = gql`
+    mutation AddArticle($title: String!, $content: String!) {
+        createArticle(title: $title, content: $content) {
+            id
+            title
+            content
+        }
+    }
+`;
