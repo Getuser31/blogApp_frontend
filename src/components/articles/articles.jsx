@@ -1,9 +1,11 @@
 import React from "react"
 import {useQuery} from "@apollo/client/react";
 import {GET_ARTICLES} from "../../graphql/queries.js";
+import {useNavigate} from "react-router-dom";
 
 const Articles = () => {
     const {loading, error, data} = useQuery(GET_ARTICLES);
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -25,6 +27,10 @@ const Articles = () => {
 
     const articles = data?.articles?.data ?? [];
 
+    const handleArticle = (id) => {
+        navigate(`/article/${id}`)
+    }
+
     return (
         <div className="bg-gray-900 text-white min-h-screen font-sans p-8">
             <div className="container mx-auto flex justify-between items-center mb-8">
@@ -37,6 +43,7 @@ const Articles = () => {
                         <div
                             key={article.id}
                             className="bg-gray-800 rounded-xl p-6 shadow-lg transform transition-transform duration-300 hover:scale-105"
+                            onClick={() => handleArticle(article.id)}
                         >
                             <h2 className="text-xl font-bold mb-2 text-indigo-300 capitalize">
                                 {article.title}

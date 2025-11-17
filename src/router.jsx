@@ -4,12 +4,14 @@ import Login from "./components/user/login.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Admin from "./components/Admin/admin.jsx";
 import AddArticle from "./components/Admin/Articles/addArticle.jsx";
+import Article from "./components/articles/article.jsx";
 
 const router = createBrowserRouter([
     {path: '/', element: <Navigate to="/articles" replace />},
     { path: "/login", element: <Login /> },
     {path: '/admin', element: <Admin />},
     {path: '/admin/addArticle', element: <AddArticle />},
+    {path: '/article/:id', element: <Article />},
 
     {
         path: '/articles',

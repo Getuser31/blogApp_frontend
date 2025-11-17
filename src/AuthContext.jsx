@@ -21,7 +21,12 @@ export const AuthProvider = ({ children }) => {
         client.query({ query: ME_QUERY })
             .then(({ data }) => {
                 if (data && data.me) {
-                    setUser({ token, role: data.me.role.name });
+                    // Set the full user object on successful session validation
+                    setUser({
+                        token,
+                        ...data.me, // Spread the user data (id, name)
+                        role: data.me.role.name // Flatten the role name
+                    });
                 }
             })
             .catch(error => {
@@ -36,9 +41,15 @@ export const AuthProvider = ({ children }) => {
 
     // The login function now accepts the full user object from the mutation
     const login = (loginPayload) => {
-        const { token, user: userData } = loginPayload;
-        localStorage.setItem('userToken', token);
-        setUser({ token, role: userData.role.name });
+        if (loginPayload?.token && loginPayload?.user) {
+            const { token, user: userData } = loginPayload;
+            localStorage.setItem('userToken', token);
+            setUser({
+                token,
+                ...userData, // Spread the user data (id, name)
+                role: userData.role.name // Flatten the role name
+            });
+        }
     };
 
     const logout = () => {

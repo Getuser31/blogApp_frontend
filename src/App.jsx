@@ -18,8 +18,8 @@ const App = () => {
                 <div className="container mx-auto flex justify-between items-center">
                     <Link to="/" className="text-xl font-bold hover:text-indigo-400">My Blog</Link>
                     <div>
-                        {/* Here is the conditional check! */}
-                        {user && user.role === 'Admin' && (
+                        {/* Conditional check for Admin role */}
+                        {user && user.role?.toUpperCase() === 'ADMIN' && (
                             <Link to="/admin" className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-md mr-4 font-semibold">
                                 Admin Panel
                             </Link>

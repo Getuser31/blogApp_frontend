@@ -1,11 +1,8 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../AuthContext.jsx";
 
 const Admin = () => {
     const navigate = useNavigate();
-    const { user } = useAuth();
-    console.log(user)
 
     return (
         <div className="bg-gray-900 text-white min-h-screen font-sans p-8">

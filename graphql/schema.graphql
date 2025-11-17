@@ -36,6 +36,9 @@ type AuthPayload {
 type Mutation {
     "Login a user and receive a token."
     login(email: String!, password: String!): AuthPayload
+
+    "Create a new article."
+    createArticle(content: String!, title: String!): Article!
 }
 
 "Information about pagination using a fully featured paginator."
@@ -67,6 +70,9 @@ type Query {
         "The offset from which items are returned."
         page: Int
     ): ArticlePaginator!
+
+    "Get the currently authenticated user."
+    me: User
 }
 
 "A user of the application."
@@ -75,8 +81,14 @@ type User {
     email: String!
     id: ID!
     name: String!
-    role: String!
+    role: Role!
     updated_at: DateTime!
+}
+
+"A role for a user."
+type Role {
+    id: ID!
+    name: String!
 }
 
 "Aggregate functions when ordering by a relation without specifying a column."

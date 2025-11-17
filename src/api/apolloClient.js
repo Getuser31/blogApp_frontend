@@ -27,12 +27,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         for (let err of graphQLErrors) {
             // Check for a specific error code or message from your backend.
             // This is a common pattern for expired/invalid tokens.
-            if (err.extensions?.code === 'UNAUTHENTICATED' || err.message.includes('Unauthenticated')) {
-                console.error("Authentication error detected. Logging out.");
-                // Clear the token from storage.
-                localStorage.removeItem('userToken');
-                // Redirect to the login page. A full page reload helps reset all state.
-                window.location.href = '/login';
+            if (err.message.includes('Unauthenticated')) {
+                // The AuthContext will handle the logout and redirect.
+                // We just log it here for debugging purposes.
+                console.error("GraphQL Unauthenticated error:", err.message);
             }
         }
     }
