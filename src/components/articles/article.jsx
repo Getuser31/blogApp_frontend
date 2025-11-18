@@ -1,11 +1,13 @@
 import React from "react";
 import {useQuery} from "@apollo/client/react";
 import {GET_ARTICLE} from "../../graphql/queries.js";
-import {useParams} from "react-router-dom";
+import {useParams, Link} from "react-router-dom";
+import {useAuth} from "../../AuthContext.jsx";
 
-const Article = () =>  {
+const Article = () => {
     const {id} = useParams();
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
+    const {user} = useAuth()
 
     if (loading) {
         return (
@@ -39,10 +41,30 @@ const Article = () =>  {
 
     return (
         <div className="bg-gray-900 text-white min-h-screen font-sans p-8">
-            <div className="container mx-auto">
-                <h1 className="text-4xl font-extrabold text-indigo-400 mb-4 capitalize">{article.title}</h1>
-                <div className="prose prose-invert max-w-none">
-                    <p>{article.content}</p>
+            <div className="container mx-auto max-w-4xl">
+                <div className="mb-8">
+                    <Link to="/articles" className="text-indigo-400 hover:text-indigo-300">
+                        &larr; Back to Articles
+                    </Link>
+                </div>
+                <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-indigo-400 capitalize">{article.title}</h1>
+                        {user && user.role?.toUpperCase() === 'ADMIN' && (
+                            <Link to={`/admin/edit/${article.id}`}
+                                  className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-md font-semibold">
+                                Edit
+                            </Link>
+                        )}
+                    </div>
+                    <div className="flex items-center text-gray-400 text-sm mb-8">
+                        <p>By {article.author.name}</p>
+                        <span className="mx-2">&bull;</span>
+                        <p>{new Date(article.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="prose prose-invert max-w-none text-lg">
+                        <p>{article.content}</p>
+                    </div>
                 </div>
             </div>
         </div>

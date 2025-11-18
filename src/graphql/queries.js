@@ -26,6 +26,11 @@ export const GET_ARTICLE = gql`
             id
             title
             content
+            created_at
+            author {
+                id
+                name
+            }
         }
     }
 `;

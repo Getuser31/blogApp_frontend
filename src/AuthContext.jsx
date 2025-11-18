@@ -59,12 +59,7 @@ export const AuthProvider = ({ children }) => {
         client.resetStore();
     };
 
-    // Don't render the app until we've checked for a session
-    if (loading) {
-        return null; // Or a loading spinner
-    }
-
-    return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, loading, login, logout }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);
