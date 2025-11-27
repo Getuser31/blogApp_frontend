@@ -31,7 +31,7 @@ export const ADD_ARTICLE = gql`
 
 export const EDIT_ARTICLE = gql`
     mutation EditArticle($id: ID!, $title: String!, $content: String!) {
-        updateArticle(id: $id, title: $title, content: $content) {
+        editArticle(id: $id, title: $title, content: $content) {
             id
             title
             content

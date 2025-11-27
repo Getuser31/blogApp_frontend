@@ -7,6 +7,8 @@ import AddArticle from "./components/Admin/Articles/addArticle.jsx";
 import Article from "./components/articles/article.jsx";
 import AdminLayout from "./AdminLayout.jsx";
 import RootLayout from "./RootLayout.jsx";
+import EditArticle from "./components/Admin/Articles/editArticle.jsx";
+import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 
 const router = createBrowserRouter([
     {
@@ -17,10 +19,11 @@ const router = createBrowserRouter([
             { path: "/login", element: <Login /> },
             {
                 path: "admin",
-                element: <AdminLayout />,
+                element: <AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>,
                 children: [
                     { index: true, element: <Admin /> },
                     { path: "addArticle", element: <AddArticle /> },
+                    { path: "edit/:id", element: <EditArticle/>},
                 ],
             },
             { path: '/article/:id', element: <Article /> },
