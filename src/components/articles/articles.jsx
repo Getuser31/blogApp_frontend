@@ -27,6 +27,8 @@ const Articles = () => {
 
     const articles = data?.articles?.data ?? [];
 
+    const sortedArticles = [...articles].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     const handleArticleClick = (id) => {
         navigate(`/article/${id}`);
     };
@@ -34,7 +36,7 @@ const Articles = () => {
     return (
         <div className="container mx-auto p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {articles.map((article) => (
+                {sortedArticles.map((article) => (
                     <div
                         key={article.id}
                         className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300"

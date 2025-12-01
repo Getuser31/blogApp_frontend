@@ -9,6 +9,7 @@ export const GET_ARTICLES = gql`
                 id
                 title
                 content
+                created_at
             }
             paginatorInfo {
                 currentPage
