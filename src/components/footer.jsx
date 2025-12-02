@@ -59,11 +59,11 @@ const Footer = () => {
                                      viewBox="0 0 48 42">
                                     <path fill="#101828"
                                           d="M0 8a8 8 0 0 1 8-8h32a8 8 0 0 1 8 8v26a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8z"/>
-                                    <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
-                                          stroke-width="1.333"
+                                    <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round"
+                                          strokeWidth="1.333"
                                           d="m30.667 17.667-5.994 3.818a1.33 1.33 0 0 1-1.34 0l-6-3.818"/>
-                                    <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
-                                          stroke-width="1.333"
+                                    <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round"
+                                          strokeWidth="1.333"
                                           d="M29.333 15.667H18.667c-.737 0-1.334.597-1.334 1.333v8c0 .736.597 1.333 1.334 1.333h10.666c.737 0 1.334-.597 1.334-1.333v-8c0-.736-.597-1.333-1.334-1.333"/>
                                 </svg>
                             </button>

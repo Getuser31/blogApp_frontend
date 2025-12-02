@@ -16,6 +16,7 @@ type Article {
     id: ID!
     title: String!
     updated_at: DateTime!
+    images: [Image!]! @hasMany
 }
 
 "A paginated list of Article items."
@@ -24,6 +25,14 @@ type ArticlePaginator {
     data: [Article!]!
     "Pagination information about the list of items."
     paginatorInfo: PaginatorInfo!
+}
+
+"An image for an article."
+type Image {
+    id: ID!
+    path: String!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 "A token response for authentication."

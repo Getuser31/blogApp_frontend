@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from '@apollo/client/react';
 import { useNavigate } from "react-router-dom";
 import { ADD_ARTICLE } from "../../../graphql/mutations";
-import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries"; // Assuming GET_CATEGORIES is here
+import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
 import Loading from "../../../utils/Loading";
-import Error from "../../../utils/Error"; 
+import Error from "../../../utils/Error";
+import ImageUpload from "./ImageUpload";
 
 const AddArticle = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [categoryIds, setCategoryIds] = useState([]);
+    const [images, setImages] = useState([]);
     const navigate = useNavigate();
-    
 
     const [addArticle, { loading, error }] = useMutation(ADD_ARTICLE, {
         refetchQueries: [{ query: GET_ARTICLES }],
         onCompleted: () => {
-            // Redirect to the main page after successful submission
             navigate("/");
         },
         onError: (error) => {
@@ -26,14 +26,29 @@ const AddArticle = () => {
 
     const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useQuery(GET_CATEGORIES);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!title || !content || categoryIds.length === 0) {
-            // Basic validation
-            return;
+        if (!title || !content) {
+            return; // Add proper validation feedback
         }
+        console.log(images[0])
+        try {
+            await addArticle({
+                variables: {
+                    title,
+                    content,
+                    categoryIds, // e.g., ['1', '2']
+                    images,      // This is your array of File objects
+                },
+            });
 
-        addArticle({ variables: { title, content, categoryIds } });
+            console.log('Article created successfully!');
+            // Handle success (e.g., clear form, redirect)
+
+        } catch (err) {
+            console.error('Error creating article:', err);
+            // Handle error (e.g., show error message)
+        }
     };
 
     const handleCategoryChange = (e) => {
@@ -96,6 +111,9 @@ const AddArticle = () => {
                     </select>
                 </div>
 
+                <div className="mb-6">
+                    <ImageUpload onUpload={setImages} />
+                </div>
 
                 {error && (
                     <div className="rounded-md bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300 mb-6">

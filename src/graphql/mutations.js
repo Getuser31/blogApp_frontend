@@ -20,14 +20,17 @@ export const LOGIN_MUTATION = gql`
 // Article Mutations
 
 export const ADD_ARTICLE = gql`
-    mutation AddArticle($title: String!, $content: String!, $categoryIds: [ID!]) {
-        createArticle(title: $title, content: $content, categoryIds: $categoryIds) {
+    mutation AddArticle($title: String!, $content: String!, $categoryIds: [ID!], $images: [Upload!]) {
+        createArticle(title: $title, content: $content, categoryIds: $categoryIds, images: $images) {
             id
             title
             content
             categories {
                 id
                 name
+            }
+            images {
+                path
             }
         }
     }
