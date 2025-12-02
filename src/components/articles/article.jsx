@@ -58,6 +58,14 @@ const Article = () => {
                         )}
                     </div>
                     <div className="flex items-center text-gray-400 text-sm mb-8">
+                        {article.categories.map((category, index) => (
+                            <React.Fragment key={category.id}>
+                                <span className="ml-2 bg-gray-700 px-2 py-1 rounded-md">{category.name}</span>
+                                {index < article.categories.length - 1 && <span className="mx-2">&bull;</span>}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                    <div className="flex items-center text-gray-400 text-sm mb-8">
                         <p>By {article.author.name}</p>
                         <span className="mx-2">&bull;</span>
                         <p>{new Date(article.created_at).toLocaleDateString()}</p>

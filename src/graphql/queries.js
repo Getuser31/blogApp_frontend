@@ -32,6 +32,10 @@ export const GET_ARTICLE = gql`
                 id
                 name
             }
+            categories {
+                id
+                name
+            }
         }
     }
 `;
@@ -49,3 +53,14 @@ export const ME_QUERY = gql`
          }
      }
  `;
+
+// Category Queries
+
+export const GET_CATEGORIES = gql`
+    query GetCategories {
+        getCategories {
+            id
+            name
+        }
+    }
+`;

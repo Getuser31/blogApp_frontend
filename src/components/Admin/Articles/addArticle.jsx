@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { useMutation } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { useNavigate } from "react-router-dom";
 import { ADD_ARTICLE } from "../../../graphql/mutations";
-import { GET_ARTICLES } from "../../../graphql/queries";
+import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries"; // Assuming GET_CATEGORIES is here
+import Loading from "../../../utils/Loading";
+import Error from "../../../utils/Error"; 
 
 const AddArticle = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [categoryIds, setCategoryIds] = useState([]);
     const navigate = useNavigate();
+    
 
     const [addArticle, { loading, error }] = useMutation(ADD_ARTICLE, {
         refetchQueries: [{ query: GET_ARTICLES }],
@@ -20,15 +24,30 @@ const AddArticle = () => {
         },
     });
 
+    const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useQuery(GET_CATEGORIES);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!title || !content) {
+        if (!title || !content || categoryIds.length === 0) {
             // Basic validation
             return;
         }
 
-        addArticle({ variables: { title, content } });
+        addArticle({ variables: { title, content, categoryIds } });
     };
+
+    const handleCategoryChange = (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+        setCategoryIds(selectedOptions);
+    };
+
+    if (categoriesLoading) {
+        return <Loading />;
+    }
+
+    if (categoriesError) {
+        return <Error message={`Error loading categories: ${categoriesError.message}`} />;
+    }
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
@@ -58,6 +77,25 @@ const AddArticle = () => {
                         required
                     />
                 </div>
+
+                <div className="mb-6">
+                    <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-300">Category</label>
+                    <select
+                        id="category"
+                        multiple={true}
+                        value={categoryIds}
+                        onChange={handleCategoryChange}
+                        className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
+                    >
+                        <option value="" disabled>Select a category</option>
+                        {(categoriesData?.getCategories || []).map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
 
                 {error && (
                     <div className="rounded-md bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300 mb-6">

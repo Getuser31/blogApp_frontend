@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
 import Login from "./components/user/login.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
 import Admin from "./components/Admin/admin.jsx";
 import AddArticle from "./components/Admin/Articles/addArticle.jsx";
 import Article from "./components/articles/article.jsx";
@@ -30,9 +29,7 @@ const router = createBrowserRouter([
             {
                 path: '/articles',
                 element: (
-                    <ProtectedRoute>
-                        <App />
-                    </ProtectedRoute>
+                    <App />
                 ),
             }
         ]
