@@ -10,6 +10,10 @@ export const GET_ARTICLES = gql`
                 title
                 content
                 created_at
+                images {
+                    id
+                    path
+                }
             }
             paginatorInfo {
                 currentPage
@@ -35,6 +39,10 @@ export const GET_ARTICLE = gql`
             categories {
                 id
                 name
+            }
+            images {
+                id
+                path
             }
         }
     }

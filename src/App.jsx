@@ -7,11 +7,9 @@ import Footer from "./components/footer.jsx";
 const App = () => {
     return (
         <div className="bg-[#A17141] min-h-screen">
-           <Menu/>
             <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <Articles />
             </main>
-            <Footer/>
         </div>
     );
 };

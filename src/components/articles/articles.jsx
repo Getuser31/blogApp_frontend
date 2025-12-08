@@ -44,7 +44,7 @@ const Articles = () => {
                     >
                         <img
                             className="w-full h-48 object-cover"
-                            src="https://placehold.co/400x300"
+                            src={article.images[0]?.path || "https://placehold.co/400x300"}
                             alt={article.title}
                         />
                         <div className="p-6">

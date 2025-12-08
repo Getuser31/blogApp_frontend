@@ -78,6 +78,12 @@ const EditArticle = () => {
                         </button>
                     </div>
                 </form>
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {article.images.map((image) => {
+                        return <img key={image.id} src={image.path} alt={image.path}
+                                    className="w-full h-auto rounded-lg shadow-lg"/>
+                    })}
+                </div>
 
             </div>
         </div>

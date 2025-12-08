@@ -65,7 +65,7 @@ const Menu = () => {
                             )}
                         </div>
                     </div>
-                    <hr className="w-full border-t border-gray-400 my-2 pb-4"/>
+                    <hr className="w-full border-t border-gray-400 pb-4"/>
                 </nav>
             </header>
         </>
