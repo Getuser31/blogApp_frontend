@@ -1,8 +1,5 @@
 import React from "react";
 import Articles from "./components/articles/articles.jsx";
-import Menu from "./components/menu.jsx";
-import Footer from "./components/footer.jsx";
-
 
 const App = () => {
     return (

@@ -31,7 +31,7 @@ const AddArticle = () => {
         if (!title || !content) {
             return; // Add proper validation feedback
         }
-        console.log(images[0])
+
         try {
             await addArticle({
                 variables: {

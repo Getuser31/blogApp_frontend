@@ -2,6 +2,7 @@ import React from "react";
 import {useQuery} from "@apollo/client/react";
 import {GET_ARTICLE} from "../../graphql/queries.js";
 import {useParams, Link} from "react-router-dom";
+import CommentsOnArticle from "../comments/commentsOnArticle.jsx";
 
 const Article = () => {
     const {id} = useParams();
@@ -91,6 +92,7 @@ const Article = () => {
                             </div>
                         </div>
                     )}
+                    <CommentsOnArticle comments={article.comments} articleId={article.id}/>
                 </div>
             </div>
         </div>

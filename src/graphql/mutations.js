@@ -45,3 +45,14 @@ export const EDIT_ARTICLE = gql`
         }
     }
 `;
+
+// Comments Mutations
+
+export const ADD_COMMENT = gql`
+    mutation AddComment($articleId: ID!, $content: String!) {
+        addComment(articleId: $articleId, content: $content) {
+            id
+            content
+        }
+    }
+`;

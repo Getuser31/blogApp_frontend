@@ -44,6 +44,15 @@ export const GET_ARTICLE = gql`
                 id
                 path
             }
+            comments {
+                id
+                content
+                created_at
+                user {
+                    id
+                    name
+                }
+            }
         }
     }
 `;
