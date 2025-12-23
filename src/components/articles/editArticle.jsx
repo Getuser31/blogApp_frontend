@@ -1,14 +1,16 @@
 import React from "react";
 import {useMutation, useQuery} from "@apollo/client/react";
-import {GET_ARTICLE} from "../../../graphql/queries.js";
-import Loading from "../../../utils/loading.jsx";
-import Error from "../../../utils/error.jsx";
+import {GET_ARTICLE} from "../../graphql/queries.js";
+import Loading from "../../utils/loading.jsx";
+import Error from "../../utils/error.jsx";
 import {Link, useParams, useNavigate} from "react-router-dom";
-import {EDIT_ARTICLE} from "../../../graphql/mutations.js";
+import {DELETE_IMAGE, EDIT_ARTICLE} from "../../graphql/mutations.js";
+import ImageUpload from "../Admin/Articles/ImageUpload.jsx";
 
 const EditArticle = () => {
     const {id} = useParams();
     const navigate = useNavigate();
+    const [message, setMessage] = React.useState('');
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
 
     const [editArticle] = useMutation(EDIT_ARTICLE, {
@@ -19,6 +21,28 @@ const EditArticle = () => {
             console.error("Error editing article", error);
         }
     });
+
+    const [removeImage] = useMutation(DELETE_IMAGE, {
+        update(cache, {data: {deleteImage}}) {
+            cache.modify({
+                id: cache.identify({__typename: 'Article', id: id}),
+                fields: {
+                    images(existingImages = [], {readField}) {
+                        return existingImages.filter(
+                            imageRef => readField('id', imageRef) !== deleteImage.id
+                        );
+                    }
+                }
+            });
+        },
+        onCompleted: () => {
+            setMessage('Image deleted successfully')
+        },
+        onError: (error) => {
+            console.error("Error deleting image", error);
+            setMessage("Error deleting image")
+        }
+    })
 
     if (loading) {
         return <Loading/>
@@ -35,10 +59,25 @@ const EditArticle = () => {
         const formData = new FormData(e.target);
         const title = formData.get('title');
         const content = formData.get('content');
+        const images = formData.getAll('images');
+        
+        // Filter out empty files if any (sometimes empty file inputs produce one empty file)
+        const validImages = images.filter(file => file.size > 0);
+
         if (!title || !content) {
             return;
         }
-        editArticle({variables: {id, title, content}});
+        
+        const variables = {id, title, content};
+        if (validImages.length > 0) {
+            variables.images = validImages;
+        }
+
+        editArticle({variables});
+    }
+
+    const deleteImage = (imageId) => {
+        removeImage({variables: {imageId: imageId}})
     }
 
     return (
@@ -69,6 +108,7 @@ const EditArticle = () => {
                         className="w-full bg-transparent text-lg text-gray-300 focus:outline-none"
                         rows="15"
                     />
+                    <ImageUpload required={false}/>
                     <div className="flex justify-end mt-8">
                         <button
                             type="submit"
@@ -78,12 +118,28 @@ const EditArticle = () => {
                         </button>
                     </div>
                 </form>
+                {message && (
+                    <div
+                        className={`mt-6 p-4 rounded-lg text-center font-semibold shadow-md ${message.toLowerCase().includes('error') ? 'bg-red-500' : 'bg-green-500'}`}>
+                        {message}
+                    </div>
+                )}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {article.images.map((image) => {
-                        return <img key={image.id} src={image.path} alt={image.path}
-                                    className="w-full h-auto rounded-lg shadow-lg"/>
+                        return (
+                            <div key={image.id} className="relative">
+                                <img src={image.path} alt={image.path} className="w-full h-auto rounded-lg shadow-lg"/>
+                                <span
+                                    onClick={() => deleteImage(image.id)}
+                                    className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center cursor-pointer hover:bg-red-700 shadow-md transition-colors duration-200"
+                                >
+                                    X
+                                </span>
+                            </div>
+                        )
                     })}
                 </div>
+
 
             </div>
         </div>

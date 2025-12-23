@@ -112,7 +112,7 @@ const AddArticle = () => {
                 </div>
 
                 <div className="mb-6">
-                    <ImageUpload onUpload={setImages} />
+                    <ImageUpload onUpload={setImages} required={true} />
                 </div>
 
                 {error && (

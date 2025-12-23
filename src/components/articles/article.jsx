@@ -1,12 +1,29 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useQuery} from "@apollo/client/react";
 import {GET_ARTICLE} from "../../graphql/queries.js";
-import {useParams, Link} from "react-router-dom";
+import {useParams, Link, useNavigate} from "react-router-dom";
 import CommentsOnArticle from "../comments/commentsOnArticle.jsx";
+import {useAuth} from "../../AuthContext.jsx";
 
 const Article = () => {
+    const navigate = useNavigate();
     const {id} = useParams();
+    const {user} = useAuth();
+    const [isAuthor, setIsAuthor] = useState(false);
+
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
+
+    const redirectToEdit = () => {
+        navigate(`/edit/${id}`);
+    }
+
+    useEffect(() => {
+        if (data && data.article && user) {
+            if (data.article.author.id === user.id) {
+                setIsAuthor(true);
+            }
+        }
+    }, [data, user]);
 
     if (loading) {
         return (
@@ -90,6 +107,15 @@ const Article = () => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                    )}
+                    {isAuthor && (
+                        <div className="mt-8 flex justify-end">
+                            <button
+                                onClick={redirectToEdit}
+                                className="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                                Edit
+                            </button>
                         </div>
                     )}
                     <CommentsOnArticle comments={article.comments} articleId={article.id}/>

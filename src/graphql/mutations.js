@@ -37,11 +37,22 @@ export const ADD_ARTICLE = gql`
 `;
 
 export const EDIT_ARTICLE = gql`
-    mutation EditArticle($id: ID!, $title: String!, $content: String!) {
-        editArticle(id: $id, title: $title, content: $content) {
+    mutation EditArticle($id: ID!, $title: String!, $content: String!, $images: [Upload]) {
+        editArticle(id: $id, title: $title, content: $content, images: $images) {
             id
             title
             content
+            images {
+                path
+            }
+        }
+    }
+`;
+
+export const DELETE_IMAGE = gql`
+    mutation DeleteImage($imageId: ID!) {
+        deleteImage(id: $imageId) {
+            id
         }
     }
 `;

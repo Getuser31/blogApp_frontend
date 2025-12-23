@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ImageUpload = ({ onUpload }) => {
+const ImageUpload = ({ onUpload, name = "images", required = false }) => {
     const [images, setImages] = useState([]);
     const [previews, setPreviews] = useState([]);
 
@@ -10,7 +10,9 @@ const ImageUpload = ({ onUpload }) => {
 
         const newPreviews = files.map((file) => URL.createObjectURL(file));
         setPreviews(newPreviews);
-        onUpload(files);
+        if (onUpload) {
+            onUpload(files);
+        }
     };
 
     return (
@@ -20,9 +22,10 @@ const ImageUpload = ({ onUpload }) => {
             </label>
             <input
                 id="images"
+                name={name}
                 type="file"
                 multiple
-                required
+                required={required}
                 onChange={handleFileChange}
                 className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
             />
