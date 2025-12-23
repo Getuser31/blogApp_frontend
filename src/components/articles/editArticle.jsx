@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {useMutation, useQuery} from "@apollo/client/react";
 import {GET_ARTICLE} from "../../graphql/queries.js";
 import Loading from "../../utils/loading.jsx";
@@ -6,12 +6,21 @@ import Error from "../../utils/error.jsx";
 import {Link, useParams, useNavigate} from "react-router-dom";
 import {DELETE_IMAGE, EDIT_ARTICLE} from "../../graphql/mutations.js";
 import ImageUpload from "../Admin/Articles/ImageUpload.jsx";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const EditArticle = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const [message, setMessage] = React.useState('');
+    const [content, setContent] = React.useState('');
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
+
+    useEffect(() => {
+        if (data?.article?.content) {
+            setContent(data.article.content);
+        }
+    }, [data]);
 
     const [editArticle] = useMutation(EDIT_ARTICLE, {
         onCompleted: () => {
@@ -58,10 +67,10 @@ const EditArticle = () => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const title = formData.get('title');
-        const content = formData.get('content');
+        // Content is now handled by state
         const images = formData.getAll('images');
         
-        // Filter out empty files if any (sometimes empty file inputs produce one empty file)
+        // Filter out empty files if any
         const validImages = images.filter(file => file.size > 0);
 
         if (!title || !content) {
@@ -102,12 +111,16 @@ const EditArticle = () => {
                         <span className="mx-2">&bull;</span>
                         <p>{new Date(article.created_at).toLocaleDateString()}</p>
                     </div>
-                    <textarea
-                        name="content"
-                        defaultValue={article.content}
-                        className="w-full bg-transparent text-lg text-gray-300 focus:outline-none"
-                        rows="15"
-                    />
+                    
+                    <div className="mb-8">
+                        <ReactQuill 
+                            theme="snow" 
+                            value={content} 
+                            onChange={setContent} 
+                            className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[200px]"
+                        />
+                    </div>
+
                     <ImageUpload required={false}/>
                     <div className="flex justify-end mt-8">
                         <button

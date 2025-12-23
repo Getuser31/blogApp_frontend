@@ -63,7 +63,7 @@ const Article = () => {
     return (
         <div className="min-h-screen bg-[#A17141]">
             <div className="py-8 px-4 sm:px-2 lg:px-2">
-                <div className="max-w-6xl mx-auto bg-stone-200 p-6 sm:p-10">
+                <div className="max-w-3xl mx-auto bg-stone-200 p-6 sm:p-10 shadow-xl rounded-lg">
                     <div className="text-left text-stone-400 text-xl font-normal font-['Inter'] mb-6 flex items-center flex-wrap">
                         {article.categories.map((category, index) => (
                             <React.Fragment key={category.id}>
@@ -85,24 +85,25 @@ const Article = () => {
 
                     {article.images && article.images.length > 0 && (
                         <div className="mb-8 flex justify-center">
-                            <img className="max-w-full h-auto" src={article.images[0].path} alt={article.title}/>
+                            <img className="max-w-full h-auto rounded-md shadow-sm" src={article.images[0].path} alt={article.title}/>
                         </div>
                     )}
 
-                    <div className="text-justify text-black text-lg font-normal font-serif leading-relaxed">
-                        {article.content}
-                    </div>
+                    <div 
+                        className="text-justify text-black text-lg font-normal font-serif leading-8 break-words whitespace-normal [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-stone-400 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:mb-6 [&_img]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:bg-gray-100 [&_pre]:p-4 [&_pre]:rounded"
+                        dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
 
                     {article.images && article.images.length > 1 && (
                         <div className="mt-12">
                             <h2 className="text-black text-3xl font-['Ubuntu_Condensed'] mb-4">Gallery</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {article.images.slice(1).map((image) => (
-                                    <div key={image.id} className="flex justify-center items-center" style={{maxHeight: '400px', maxWidth: '650px'}}>
+                                    <div key={image.id} className="flex justify-center items-center overflow-hidden rounded-md shadow-sm">
                                         <img
                                             src={image.path}
                                             alt={image.path}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                 ))}

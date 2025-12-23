@@ -6,6 +6,8 @@ import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
 import Loading from "../../../utils/Loading";
 import Error from "../../../utils/Error";
 import ImageUpload from "./ImageUpload";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const AddArticle = () => {
     const [title, setTitle] = useState("");
@@ -82,14 +84,12 @@ const AddArticle = () => {
                 </div>
 
                 <div className="mb-6">
-                    <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-300">Content</label>
-                    <textarea
-                        id="content"
+                    <label htmlFor="content" className="block mb-2 text-sm font-medium ">Content</label>
+                    <ReactQuill
+                        theme="snow"
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        rows="6"
-                        className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
-                        required
+                        onChange={setContent}
+                        className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[200px]"
                     />
                 </div>
 
