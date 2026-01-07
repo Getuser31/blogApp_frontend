@@ -17,6 +17,16 @@ export const LOGIN_MUTATION = gql`
     }
 `;
 
+export const ADD_USER = gql`
+    mutation AddUser($username: String!, $password: String!, $passwordRepeat: String!, $email: String!) {
+        addUser(username: $username, password: $password, passwordRepeat: $passwordRepeat, email: $email) {
+            id
+            name
+            email
+        }
+    }
+    `;
+
 // Article Mutations
 
 export const ADD_ARTICLE = gql`

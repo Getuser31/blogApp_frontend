@@ -8,6 +8,7 @@ import AdminLayout from "./AdminLayout.jsx";
 import RootLayout from "./RootLayout.jsx";
 import EditArticle from "./components/articles/editArticle.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
+import Registration from "./components/user/registration.jsx";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
                 element: (
                     <App />
                 ),
+            },
+            {
+                path: '/registration',
+                element: <Registration />
             }
         ]
     }
