@@ -71,6 +71,37 @@ export const ME_QUERY = gql`
      }
  `;
 
+export const USER_DATA = gql`
+    query UserData($userId: ID!) {
+        getUserData(id: $userId){
+            id
+            name
+            email
+            articles(
+                limit: 5
+                orderBy: [{column: "created_at", order: DESC}]
+            ){
+                id
+                title
+                content
+                created_at
+            }
+            commentedArticles {
+                id
+                title
+                comments(
+                    limit: 5
+                    orderBy: [{column: "created_at", order: DESC}]
+                ) {
+                    id
+                    content
+                    created_at
+                }
+            }
+        }
+    }
+`
+
 // Category Queries
 
 export const GET_CATEGORIES = gql`

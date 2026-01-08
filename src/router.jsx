@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import {createBrowserRouter, Navigate} from "react-router-dom";
 import App from "./App";
 import Login from "./components/user/login.jsx";
 import Admin from "./components/Admin/admin.jsx";
@@ -9,33 +9,32 @@ import RootLayout from "./RootLayout.jsx";
 import EditArticle from "./components/articles/editArticle.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import Registration from "./components/user/registration.jsx";
+import UserProfile from "./components/user/userProfile.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <RootLayout />,
+        element: <RootLayout/>,
         children: [
-            { index: true, element: <Navigate to="/articles" replace /> },
-            { path: "edit/:id", element: <EditArticle/>},
-            { path: "/login", element: <Login /> },
+            {index: true, element: <Navigate to="/articles" replace/>},
+            {path: "edit/:id", element: <EditArticle/>},
+            {path: "/login", element: <Login/>},
+            {path: '/registration', element: <Registration/>},
+            {path: '/userProfile', element: <UserProfile/>},
             {
                 path: "admin",
-                element: <AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>,
+                element: <AdminProtectedRoute><AdminLayout/></AdminProtectedRoute>,
                 children: [
-                    { index: true, element: <Admin /> },
-                    { path: "addArticle", element: <AddArticle /> },
+                    {index: true, element: <Admin/>},
+                    {path: "addArticle", element: <AddArticle/>},
                 ],
             },
-            { path: '/article/:id', element: <Article /> },
+            {path: '/article/:id', element: <Article/>},
             {
                 path: '/articles',
                 element: (
-                    <App />
+                    <App/>
                 ),
-            },
-            {
-                path: '/registration',
-                element: <Registration />
             }
         ]
     }

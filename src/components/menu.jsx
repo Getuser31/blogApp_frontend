@@ -1,15 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../AuthContext.jsx";
+import {FaUser, FaEdit} from "react-icons/fa";
 
 const Menu = () => {
     const navigate = useNavigate();
     const {user, logout} = useAuth();
+    const [isHidden, setIsHidden] = useState(true);
 
     const handleLogout = async () => {
         logout();
         navigate("/login");
     };
+
+    const handleDropdownUser = () => {
+        setIsHidden(!isHidden);
+    }
+
+    const handleBlur = (e) => {
+        if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) {
+            return;
+        }
+        setIsHidden(true);
+    }
 
     const isAdmin = user && user.role?.toUpperCase() === 'ADMIN';
 
@@ -48,6 +61,44 @@ const Menu = () => {
                                             Admin
                                         </Link>
                                     )}
+                                    <div className="relative" onBlur={handleBlur}>
+                                        <button
+                                            onClick={handleDropdownUser}
+                                            className="px-4 py-2 text-sm font-medium text-black bg-white rounded-md border-1 border-gray-200 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                        >
+                                            Profile
+                                        </button>
+                                        {!isHidden && (
+                                            <div
+                                                className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+                                                <ul className="flex flex-col">
+                                                    <li>
+                                                        <Link to="/userProfile" className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors duration-150">
+                                                            <FaUser className="text-lg text-gray-400 group-hover:text-indigo-600" />
+                                                            <span className="font-medium">{user.name}</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
+                                                            <span className="font-medium">Your articles</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
+                                                            <span className="font-medium">Your drafts</span>
+                                                        </div>
+                                                    </li>
+                                                    <div className="my-1 border-t border-gray-100"></div>
+                                                    <li>
+                                                        <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
+                                                            <FaEdit className="text-lg text-gray-400 group-hover:text-indigo-600" />
+                                                            <span className="font-medium">Write Now</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                     <button
                                         onClick={handleLogout}
                                         className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -57,12 +108,12 @@ const Menu = () => {
                                 </>
                             ) : (
                                 <>
-                                <Link
-                                    to="/login"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-[#A17141] rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                                >
-                                    Login
-                                </Link>
+                                    <Link
+                                        to="/login"
+                                        className="px-4 py-2 text-sm font-medium text-white bg-[#A17141] rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                    >
+                                        Login
+                                    </Link>
                                     <Link
                                         to="/registration"
                                         className="px-4 py-2 text-sm font-medium text-white bg-[#A17141] rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
@@ -80,4 +131,4 @@ const Menu = () => {
     )
 }
 
-export default Menu
+export default Menu;
