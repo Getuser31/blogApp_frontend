@@ -10,6 +10,7 @@ import EditArticle from "./components/articles/editArticle.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import Registration from "./components/user/registration.jsx";
 import UserProfile from "./components/user/userProfile.jsx";
+import PublishedArticles from "./components/articles/userArticles.jsx";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
             {path: "/login", element: <Login/>},
             {path: '/registration', element: <Registration/>},
             {path: '/userProfile', element: <UserProfile/>},
+            {path: '/userArticles', element: <PublishedArticles/>},
             {
                 path: "admin",
                 element: <AdminProtectedRoute><AdminLayout/></AdminProtectedRoute>,

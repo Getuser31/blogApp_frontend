@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 // Article Queries
 
 export const GET_ARTICLES = gql`
-    query GetArticles {
-        publishedArticles {
+    query GetArticles($page: Int) {
+        publishedArticles(first: 10, page: $page) {
             data {
                 id
                 title
@@ -101,6 +101,33 @@ export const USER_DATA = gql`
         }
     }
 `
+
+export const USER_ARTICLES = gql`
+    query GetUserArticles {
+        userArticles {
+            id
+            name
+            articles(
+                orderBy: [{column: "created_at", order: DESC}]
+            ){
+                id
+                title
+                content
+                created_at
+                published
+                categories {
+                    id
+                    name
+                }
+                images {
+                    id
+                    path
+                }
+            }
+        }
+    }
+`
+
 
 // Category Queries
 

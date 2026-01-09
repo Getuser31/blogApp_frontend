@@ -90,12 +90,8 @@ const UserProfile = () => {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 mt-6">
                         <Link className="bg-[#A17141] text-white px-4 py-3 text-lg hover:bg-[#8a6036] transition-colors flex-1 text-center rounded"
-                        to="/publishedArticles">
-                            Show All Published
-                        </Link>
-                        <Link className="bg-[#A17141] text-white px-4 py-3 text-lg hover:bg-[#8a6036] transition-colors flex-1 text-center rounded"
-                        to="/draftArticles">
-                            Show All Drafts
+                        to="/userArticles">
+                            Show All Articles
                         </Link>
                     </div>
                 </Card>

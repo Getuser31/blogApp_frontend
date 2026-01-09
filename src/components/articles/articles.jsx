@@ -4,10 +4,12 @@ import { GET_ARTICLES } from "../../graphql/queries.js";
 import { useNavigate } from "react-router-dom";
 
 const Articles = () => {
-    const { loading, error, data } = useQuery(GET_ARTICLES);
+    const { loading, error, data, fetchMore } = useQuery(GET_ARTICLES, {
+        variables: { page: 1 },
+    });
     const navigate = useNavigate();
 
-    if (loading) {
+    if (loading && !data) {
         return (
             <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6 font-sans">
                 <div className="text-center">
@@ -33,6 +35,28 @@ const Articles = () => {
         navigate(`/article/${id}`);
     };
 
+    const handleLoadMore = () => {
+        if (data?.publishedArticles?.paginatorInfo?.hasMorePages) {
+            fetchMore({
+                variables: {
+                    page: data.publishedArticles.paginatorInfo.currentPage + 1,
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev;
+                    return {
+                        publishedArticles: {
+                            ...fetchMoreResult.publishedArticles,
+                            data: [
+                                ...prev.publishedArticles.data,
+                                ...fetchMoreResult.publishedArticles.data,
+                            ],
+                        },
+                    };
+                },
+            });
+        }
+    }
+
     return (
         <div className="container mx-auto p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -56,6 +80,14 @@ const Articles = () => {
                     </div>
                 ))}
             </div>
+            {data?.publishedArticles?.paginatorInfo?.hasMorePages && (
+                <button 
+                    className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                    onClick={handleLoadMore}
+                >
+                    Load More
+                </button>
+            )}
         </div>
     );
 };
