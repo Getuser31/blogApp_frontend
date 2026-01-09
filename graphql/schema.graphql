@@ -17,6 +17,7 @@ type Article {
     title: String!
     updated_at: DateTime!
     images: [Image!]! @hasMany
+    published: Boolean!
 }
 
 "A paginated list of Article items."
@@ -73,7 +74,7 @@ type PaginatorInfo {
 "Defines the queries available to the client."
 type Query {
     "Find all articles, paginated."
-    articles(
+    publishedArticles(
         "Limits number of fetched items."
         first: Int! = 10,
         "The offset from which items are returned."

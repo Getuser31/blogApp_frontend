@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 
 export const GET_ARTICLES = gql`
     query GetArticles {
-        articles {
+        publishedArticles {
             data {
                 id
                 title
@@ -78,13 +78,13 @@ export const USER_DATA = gql`
             name
             email
             articles(
-                limit: 5
                 orderBy: [{column: "created_at", order: DESC}]
             ){
                 id
                 title
                 content
                 created_at
+                published
             }
             commentedArticles {
                 id

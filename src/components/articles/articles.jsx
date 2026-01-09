@@ -25,7 +25,7 @@ const Articles = () => {
         );
     }
 
-    const articles = data?.articles?.data ?? [];
+    const articles = data?.publishedArticles?.data ?? [];
 
     const sortedArticles = [...articles].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
