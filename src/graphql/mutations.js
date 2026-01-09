@@ -77,3 +77,22 @@ export const ADD_COMMENT = gql`
         }
     }
 `;
+
+//categories mutation
+
+export const ADD_CATEGORY = gql`
+    mutation AddCategory($name: String!) {
+        addCategory(name: $name) {
+            id
+            name
+        }
+    }
+`;
+
+export const DELETE_CATEGORY = gql`
+    mutation DeleteCategory($categoryId: ID!) {
+        deleteCategory(id: $categoryId) {
+            id
+        }
+    }
+`;

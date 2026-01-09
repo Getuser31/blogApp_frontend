@@ -7,10 +7,10 @@ import Article from "./components/articles/article.jsx";
 import AdminLayout from "./AdminLayout.jsx";
 import RootLayout from "./RootLayout.jsx";
 import EditArticle from "./components/articles/editArticle.jsx";
-import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import Registration from "./components/user/registration.jsx";
 import UserProfile from "./components/user/userProfile.jsx";
 import PublishedArticles from "./components/articles/userArticles.jsx";
+import Categories from "./components/Admin/categories.jsx";
 
 const router = createBrowserRouter([
     {
@@ -25,10 +25,11 @@ const router = createBrowserRouter([
             {path: '/userArticles', element: <PublishedArticles/>},
             {
                 path: "admin",
-                element: <AdminProtectedRoute><AdminLayout/></AdminProtectedRoute>,
+                element: <AdminLayout/>,
                 children: [
                     {index: true, element: <Admin/>},
                     {path: "addArticle", element: <AddArticle/>},
+                    {path: "categories", element: <Categories/>},
                 ],
             },
             {path: '/article/:id', element: <Article/>},

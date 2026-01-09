@@ -19,6 +19,11 @@ const Admin = () => {
                     >
                         Edit Article
                     </li>
+                    <li className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer"
+                        onClick={() => navigate("/admin/categories")}
+                    >
+                        Manage Categories
+                    </li>
                 </ul>
             </div>
         </div>
