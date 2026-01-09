@@ -3,8 +3,12 @@ import { gql } from '@apollo/client';
 // Article Queries
 
 export const GET_ARTICLES = gql`
-    query GetArticles($page: Int) {
-        publishedArticles(first: 10, page: $page) {
+    query GetArticles($category_id: ID, $page: Int) {
+        publishedArticles(
+         first: 10, 
+         page: $page, 
+         category_id: $category_id
+        ) {
             data {
                 id
                 title

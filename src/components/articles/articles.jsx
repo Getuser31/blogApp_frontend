@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client/react";
-import { GET_ARTICLES } from "../../graphql/queries.js";
+import { GET_ARTICLES, GET_CATEGORIES } from "../../graphql/queries.js";
 import { useNavigate } from "react-router-dom";
 
 const Articles = () => {
-    const { loading, error, data, fetchMore } = useQuery(GET_ARTICLES, {
-        variables: { page: 1 },
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const { loading, error, data, fetchMore, refetch } = useQuery(GET_ARTICLES, {
+        variables: { page: 1, category_id: selectedCategory || undefined },
     });
+    const { data: categoriesData } = useQuery(GET_CATEGORIES);
+
     const navigate = useNavigate();
 
     if (loading && !data) {
@@ -40,6 +43,7 @@ const Articles = () => {
             fetchMore({
                 variables: {
                     page: data.publishedArticles.paginatorInfo.currentPage + 1,
+                    category_id: selectedCategory || undefined
                 },
                 updateQuery: (prev, { fetchMoreResult }) => {
                     if (!fetchMoreResult) return prev;
@@ -57,8 +61,29 @@ const Articles = () => {
         }
     }
 
+    const handleCategoryFilter = (event) => {
+        const categoryId = event.target.value;
+        setSelectedCategory(categoryId);
+        refetch({ page: 1, category_id: categoryId || undefined });
+    };
+
     return (
         <div className="container mx-auto p-6">
+            <div className="mb-6">
+                <h3 className="text-lg font-bold mb-2">Filter By Categories</h3>
+                <select 
+                    onChange={handleCategoryFilter} 
+                    value={selectedCategory}
+                    className="p-2 border rounded bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="">All Categories</option>
+                    {categoriesData?.getCategories?.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {sortedArticles.map((article) => (
                     <div
