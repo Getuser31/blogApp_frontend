@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {useMutation, useQuery} from "@apollo/client/react";
-import {GET_ARTICLE} from "../../graphql/queries.js";
+import {GET_ARTICLE, GET_CATEGORIES} from "../../graphql/queries.js";
 import Loading from "../../utils/loading.jsx";
 import Error from "../../utils/error.jsx";
 import {Link, useParams, useNavigate} from "react-router-dom";
@@ -15,10 +15,15 @@ const EditArticle = () => {
     const [message, setMessage] = React.useState('');
     const [content, setContent] = React.useState('');
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
+    const {data: categoriesData} = useQuery(GET_CATEGORIES)
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
     useEffect(() => {
         if (data?.article?.content) {
             setContent(data.article.content);
+        }
+        if (data?.article?.categories) {
+            setSelectedCategories(data.article.categories.map(c => c.id));
         }
     }, [data]);
 
@@ -67,17 +72,14 @@ const EditArticle = () => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const title = formData.get('title');
-        // Content is now handled by state
         const images = formData.getAll('images');
-        
-        // Filter out empty files if any
         const validImages = images.filter(file => file.size > 0);
 
         if (!title || !content) {
             return;
         }
         
-        const variables = {id, title, content};
+        const variables = {id, title, content, categoryIds: selectedCategories};
         if (validImages.length > 0) {
             variables.images = validImages;
         }
@@ -87,6 +89,16 @@ const EditArticle = () => {
 
     const deleteImage = (imageId) => {
         removeImage({variables: {imageId: imageId}})
+    }
+
+    const handleCategoryChange = (categoryId) => {
+        setSelectedCategories(prev => {
+            if (prev.includes(categoryId)) {
+                return prev.filter(id => id !== categoryId);
+            } else {
+                return [...prev, categoryId];
+            }
+        });
     }
 
     return (
@@ -110,6 +122,26 @@ const EditArticle = () => {
                         <p>By {article.author.name}</p>
                         <span className="mx-2">&bull;</span>
                         <p>{new Date(article.created_at).toLocaleDateString()}</p>
+                    </div>
+
+                    <div className="mb-8">
+                        <label className="block text-gray-400 text-sm font-bold mb-2">
+                            Categories
+                        </label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-gray-700 p-4 rounded-lg border border-gray-600">
+                            {categoriesData?.getCategories?.map((category) => (
+                                <label key={category.id} className="flex items-center space-x-3 cursor-pointer hover:bg-gray-600 p-2 rounded transition-colors">
+                                    <input
+                                        type="checkbox"
+                                        value={category.id}
+                                        checked={selectedCategories.includes(category.id)}
+                                        onChange={() => handleCategoryChange(category.id)}
+                                        className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 bg-gray-800 border-gray-500"
+                                    />
+                                    <span className="text-gray-200 select-none">{category.name}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
                     
                     <div className="mb-8">

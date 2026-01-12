@@ -47,11 +47,15 @@ export const ADD_ARTICLE = gql`
 `;
 
 export const EDIT_ARTICLE = gql`
-    mutation EditArticle($id: ID!, $title: String!, $content: String!, $images: [Upload]) {
-        editArticle(id: $id, title: $title, content: $content, images: $images) {
+    mutation EditArticle($id: ID!, $title: String!, $content: String!, $categoryIds: [ID!], $images: [Upload]) {
+        editArticle(id: $id, title: $title, content: $content, categoryIds: $categoryIds, images: $images) {
             id
             title
             content
+            categories {
+                id
+                name
+            }
             images {
                 path
             }
