@@ -2,11 +2,16 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../AuthContext.jsx";
 import {FaUser, FaEdit} from "react-icons/fa";
+import {useLazyQuery} from "@apollo/client/react";
+import {SEARCH_ARTICLES} from "../graphql/queries.js";
 
 const Menu = () => {
     const navigate = useNavigate();
     const {user, logout} = useAuth();
     const [isHidden, setIsHidden] = useState(true);
+    const [search, setSearch] = useState('')
+    const [searchArticles, {loading, error, data}] = useLazyQuery(SEARCH_ARTICLES);
+    const [searchResultIsHidden, setSearchResultIsHidden] = useState(true)
 
     const handleLogout = async () => {
         logout();
@@ -24,7 +29,25 @@ const Menu = () => {
         setIsHidden(true);
     }
 
+    const handleSearchBlur = (e) => {
+        if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) {
+            return;
+        }
+        setSearchResultIsHidden(true);
+    }
+
     const isAdmin = user && user.role?.toUpperCase() === 'ADMIN';
+    
+    const handleSearch = (e) => {
+        const value = e.target.value;
+        setSearch(value);
+        if (value.length > 3) {
+            searchArticles({ variables: { query: value } });
+            setSearchResultIsHidden(false);
+        } else {
+            setSearchResultIsHidden(true);
+        }
+    }
 
     return (
         <>
@@ -44,12 +67,31 @@ const Menu = () => {
                             </Link>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <div className="relative">
+                            <div className="relative" onBlur={handleSearchBlur}>
                                 <input
+                                    value={search}
+                                    onChange={handleSearch}
                                     type="search"
                                     placeholder="Search..."
                                     className="bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
                                 />
+                                {!searchResultIsHidden && (
+                                    <div className="absolute left-0 mt-2 w-full bg-white rounded-xl shadow-2xl py-2 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+                                        {loading && <div className="px-4 py-2">Loading...</div>}
+                                        {error && <div className="px-4 py-2">Error: {error.message}</div>}
+                                        {data && data.searchArticles?.data?.length > 0 ? (
+                                            data.searchArticles.data.map(article => (
+                                                <div key={article.id} className="px-4 py-2 hover:bg-gray-100">
+                                                    <Link to={`/article/${article.id}`} className="block text-sm text-gray-700">{article.title}</Link>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="px-4 py-2">
+                                                <p className="text-sm text-gray-500">No results found.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             {user ? (
                                 <>

@@ -61,6 +61,23 @@ export const GET_ARTICLE = gql`
     }
 `;
 
+export const SEARCH_ARTICLES = gql`
+ query SearchArticles($query: String!) {
+  searchArticles(search: $query) {
+   data {
+    id
+    title
+   }
+   paginatorInfo {
+    currentPage
+    lastPage
+    hasMorePages
+    total
+   }
+  }
+ }
+`;
+
 // User Queries
 
 export const ME_QUERY = gql`
