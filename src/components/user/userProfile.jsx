@@ -20,6 +20,7 @@ const UserProfile = () => {
     });
 
     const userData = data?.getUserData;
+    const favoriteArticles = userData?.favoriteArticles;
 
     if (loading || authLoading || !userData) {
         return <div className="min-h-screen bg-[#A17141] p-8 font-mono text-white">Loading...</div>;
@@ -101,10 +102,18 @@ const UserProfile = () => {
                         <div>
                             <h3 className="mb-2 font-semibold text-gray-700 uppercase text-sm tracking-wide">Last articles added to favorites:</h3>
                             <ul className="list-disc list-inside space-y-1 text-gray-600">
-                                {userData.articles?.slice(0, 5).map((article) => (
-                                    <li key={article.id}>{article.title}</li>
+                                {favoriteArticles?.slice(0, 5).map((article) => (
+                                    <li><Link key={article.id} to={`/article/${article.id}`}>{article.title}</Link></li>
                                 ))}
                             </ul>
+                            {favoriteArticles?.length > 5 && (
+                                <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                                    <Link className="bg-[#A17141] text-white px-4 py-3 text-lg hover:bg-[#8a6036] transition-colors flex-1 text-center rounded"
+                                          to="/favoriteArticle">
+                                        Show All Favorite Articles
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
 

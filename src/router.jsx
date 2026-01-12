@@ -11,6 +11,7 @@ import Registration from "./components/user/registration.jsx";
 import UserProfile from "./components/user/userProfile.jsx";
 import PublishedArticles from "./components/articles/userArticles.jsx";
 import Categories from "./components/Admin/categories.jsx";
+import FavoriteArticles from "./components/user/favoriteArticles.jsx";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
             {path: '/registration', element: <Registration/>},
             {path: '/userProfile', element: <UserProfile/>},
             {path: '/userArticles', element: <PublishedArticles/>},
+            {path: '/favoriteArticle', element: <FavoriteArticles/>},
             {
                 path: "admin",
                 element: <AdminLayout/>,

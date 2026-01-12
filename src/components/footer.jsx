@@ -1,7 +1,11 @@
 import React from "react";
 import {FaFacebook, FaTwitter, FaInstagram, FaLinkedin} from "react-icons/fa";
+import {Link} from "react-router-dom";
+import {useQuery} from "@apollo/client/react";
+import {GET_CATEGORIES} from "../graphql/queries.js";
 
 const Footer = () => {
+    const {loading, error, data} = useQuery(GET_CATEGORIES);
     return (
         <footer className="bg-white border-t border-gray-200">
             <div className="container mx-auto px-6 py-12">
@@ -19,8 +23,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Links</h3>
                         <ul className="space-y-2">
-                            <li><a href="/" className="text-gray-600 hover:text-gray-900">Home</a></li>
-                            <li><a href="/articles" className="text-gray-600 hover:text-gray-900">Articles</a></li>
+                            <li><Link to="/" className="text-gray-600 hover:text-gray-900">Home</Link></li>
                             <li><a href="/categories" className="text-gray-600 hover:text-gray-900">Categories</a></li>
                             <li><a href="/about" className="text-gray-600 hover:text-gray-900">About Us</a></li>
                         </ul>
@@ -30,12 +33,15 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
                         <ul className="space-y-2">
-                            <li><a href="/category/technology"
-                                   className="text-gray-600 hover:text-gray-900">Technology</a></li>
-                            <li><a href="/category/design" className="text-gray-600 hover:text-gray-900">Design</a></li>
-                            <li><a href="/category/lifestyle"
-                                   className="text-gray-600 hover:text-gray-900">Lifestyle</a></li>
-                            <li><a href="/category/travel" className="text-gray-600 hover:text-gray-900">Travel</a></li>
+                            {loading && <li>Loading categories...</li>}
+                            {error && <li>Error loading categories</li>}
+                            {data?.getCategories?.map((category) => (
+                                <li key={category.id}>
+                                    <Link to={`/category/${category.name}`}
+                                          className="text-gray-600 hover:text-gray-900">{category.name}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
@@ -77,12 +83,6 @@ const Footer = () => {
                     <p className="text-gray-600 text-sm">
                         © {new Date().getFullYear()} My Blog. All rights reserved.
                     </p>
-                    <div className="flex space-x-4 mt-4 md:mt-0">
-                        <a href="#" className="text-gray-600 hover:text-gray-900"><FaFacebook size={20}/></a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900"><FaTwitter size={20}/></a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900"><FaInstagram size={20}/></a>
-                        <a href="#" className="text-gray-600 hover:text-gray-900"><FaLinkedin size={20}/></a>
-                    </div>
                 </div>
             </div>
         </footer>

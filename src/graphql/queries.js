@@ -50,13 +50,14 @@ export const GET_ARTICLE = gql`
             }
             comments {
                 id
-                content
+                content 
                 created_at
                 user {
                     id
                     name
                 }
             }
+            isFavorite
         }
     }
 `;
@@ -119,6 +120,10 @@ export const USER_DATA = gql`
                     created_at
                 }
             }
+            favoriteArticles {
+                id
+                title
+            }
         }
     }
 `
@@ -144,6 +149,18 @@ export const USER_ARTICLES = gql`
                     id
                     path
                 }
+            }
+        }
+    }
+`
+
+export const GET_FAVORITE_ARTICLES = gql`
+    query GetFavoriteArticles {
+        getFavoriteArticles {
+            id
+            favoriteArticles {
+             id
+             title
             }
         }
     }

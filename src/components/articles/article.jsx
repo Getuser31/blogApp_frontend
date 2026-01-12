@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {useQuery} from "@apollo/client/react";
+import {useMutation, useQuery} from "@apollo/client/react";
 import {GET_ARTICLE} from "../../graphql/queries.js";
 import {useParams, Link, useNavigate} from "react-router-dom";
 import CommentsOnArticle from "../comments/commentsOnArticle.jsx";
 import {useAuth} from "../../AuthContext.jsx";
+import {TOGGLE_ARTICLE_FAVORITE} from "../../graphql/mutations.js";
 
 const Article = () => {
     const navigate = useNavigate();
@@ -12,6 +13,14 @@ const Article = () => {
     const [isAuthor, setIsAuthor] = useState(false);
 
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
+
+    const [ToogleFavorite, {loading: favoriteLoading, error: favoriteError}] = useMutation(TOGGLE_ARTICLE_FAVORITE, {
+        onCompleted: (data) => {
+            if (data && data.toggleArticleFavorite) {
+                data.article.isFavorite = data.toggleArticleFavorite.isFavorite;
+            }
+        }
+    })
 
     const redirectToEdit = () => {
         navigate(`/edit/${id}`);
@@ -60,6 +69,14 @@ const Article = () => {
         day: 'numeric'
     });
 
+    const handleFavorite = async () => {
+        try {
+            await ToogleFavorite({variables: {articleId: article.id}})
+        } catch (error) {
+            console.error('Error toggling favorite:', error)
+        }
+    }
+
     return (
         <div className="min-h-screen bg-[#A17141]">
             <div className="py-8 px-4 sm:px-2 lg:px-2">
@@ -79,8 +96,13 @@ const Article = () => {
                     </div>
 
                     <div className="text-stone-400 text-lg font-normal font-serif capitalize mb-8">
-                        By {article.author.name}<br/>
-                        Published on {formattedDate}
+                        <div>By {article.author.name}</div>
+                        <div className="flex justify-between items-center">
+                            <span>Published on {formattedDate}</span>
+                            <span onClick={handleFavorite} className={`text-4xl cursor-pointer ${article.isFavorite ? "text-yellow-500" : "text-gray-400"}`}>
+                                {article.isFavorite ? "★" : "☆"}
+                            </span>
+                        </div>
                     </div>
 
                     {article.images && article.images.length > 0 && (

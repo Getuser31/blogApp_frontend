@@ -71,6 +71,15 @@ export const DELETE_IMAGE = gql`
     }
 `;
 
+export const TOGGLE_ARTICLE_FAVORITE = gql`
+    mutation ToggleArticleFavorite($articleId: ID!) {
+        addFavoriteArticle(articleId: $articleId) {
+            id
+            isFavorite
+        }
+    }
+`;
+
 // Comments Mutations
 
 export const ADD_COMMENT = gql`
