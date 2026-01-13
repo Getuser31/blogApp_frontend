@@ -124,6 +124,10 @@ export const USER_DATA = gql`
                 id
                 title
             }
+            lastReadArticles {
+                id
+                title
+            }
         }
     }
 `

@@ -4,7 +4,7 @@ import {GET_ARTICLE} from "../../graphql/queries.js";
 import {useParams, Link, useNavigate} from "react-router-dom";
 import CommentsOnArticle from "../comments/commentsOnArticle.jsx";
 import {useAuth} from "../../AuthContext.jsx";
-import {TOGGLE_ARTICLE_FAVORITE} from "../../graphql/mutations.js";
+import {ADD_LAST_READ_ARTICLE, TOGGLE_ARTICLE_FAVORITE} from "../../graphql/mutations.js";
 
 const Article = () => {
     const navigate = useNavigate();
@@ -22,6 +22,8 @@ const Article = () => {
         }
     })
 
+    const [saveLastReadArticle, {loading: saveLoading, error: saveError}] = useMutation(ADD_LAST_READ_ARTICLE)
+
     const redirectToEdit = () => {
         navigate(`/edit/${id}`);
     }
@@ -33,6 +35,12 @@ const Article = () => {
             }
         }
     }, [data, user]);
+
+    useEffect(() => {
+        if (data && data.article) {
+            saveLastReadArticle({variables: {articleId: data.article.id}})
+        }
+    }, [data?.article?.id]);
 
     if (loading) {
         return (
@@ -81,11 +89,13 @@ const Article = () => {
         <div className="min-h-screen bg-[#A17141]">
             <div className="py-8 px-4 sm:px-2 lg:px-2">
                 <div className="max-w-3xl mx-auto bg-stone-200 p-6 sm:p-10 shadow-xl rounded-lg">
-                    <div className="text-left text-stone-400 text-xl font-normal font-['Inter'] mb-6 flex items-center flex-wrap">
+                    <div
+                        className="text-left text-stone-400 text-xl font-normal font-['Inter'] mb-6 flex items-center flex-wrap">
                         {article.categories.map((category, index) => (
                             <React.Fragment key={category.id}>
                                 <span>{category.name}</span>
-                                {index < article.categories.length - 1 && <span className="mx-2 font-bold">&bull;</span>}
+                                {index < article.categories.length - 1 &&
+                                    <span className="mx-2 font-bold">&bull;</span>}
                             </React.Fragment>
                         ))}
                     </div>
@@ -99,7 +109,8 @@ const Article = () => {
                         <div>By {article.author.name}</div>
                         <div className="flex justify-between items-center">
                             <span>Published on {formattedDate}</span>
-                            <span onClick={handleFavorite} className={`text-4xl cursor-pointer ${article.isFavorite ? "text-yellow-500" : "text-gray-400"}`}>
+                            <span onClick={handleFavorite}
+                                  className={`text-4xl cursor-pointer ${article.isFavorite ? "text-yellow-500" : "text-gray-400"}`}>
                                 {article.isFavorite ? "★" : "☆"}
                             </span>
                         </div>
@@ -107,13 +118,14 @@ const Article = () => {
 
                     {article.images && article.images.length > 0 && (
                         <div className="mb-8 flex justify-center">
-                            <img className="max-w-full h-auto rounded-md shadow-sm" src={article.images[0].path} alt={article.title}/>
+                            <img className="max-w-full h-auto rounded-md shadow-sm" src={article.images[0].path}
+                                 alt={article.title}/>
                         </div>
                     )}
 
-                    <div 
+                    <div
                         className="text-justify text-black text-lg font-normal font-serif leading-8 break-words whitespace-normal [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-stone-400 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:mb-6 [&_img]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:bg-gray-100 [&_pre]:p-4 [&_pre]:rounded"
-                        dangerouslySetInnerHTML={{ __html: article.content }}
+                        dangerouslySetInnerHTML={{__html: article.content}}
                     />
 
                     {article.images && article.images.length > 1 && (
@@ -121,7 +133,8 @@ const Article = () => {
                             <h2 className="text-black text-3xl font-['Ubuntu_Condensed'] mb-4">Gallery</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {article.images.slice(1).map((image) => (
-                                    <div key={image.id} className="flex justify-center items-center overflow-hidden rounded-md shadow-sm">
+                                    <div key={image.id}
+                                         className="flex justify-center items-center overflow-hidden rounded-md shadow-sm">
                                         <img
                                             src={image.path}
                                             alt={image.path}

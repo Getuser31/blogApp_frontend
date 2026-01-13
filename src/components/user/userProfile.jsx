@@ -21,6 +21,7 @@ const UserProfile = () => {
 
     const userData = data?.getUserData;
     const favoriteArticles = userData?.favoriteArticles;
+    const lastReadArticles = userData?.lastReadArticles;
 
     if (loading || authLoading || !userData) {
         return <div className="min-h-screen bg-[#A17141] p-8 font-mono text-white">Loading...</div>;
@@ -53,8 +54,8 @@ const UserProfile = () => {
                         <div>
                             <h3 className="mb-2 font-semibold text-gray-700 uppercase text-sm tracking-wide">Last articles read:</h3>
                             <ul className="list-disc list-inside space-y-1 text-gray-600">
-                                {userData.lastArticlesRead?.map((article) => (
-                                    <li key={article.id}>{article.title}</li>
+                                {lastReadArticles.map((article) => (
+                                  <Link key={article.id} to={`/article/${article.id}`}> <li key={article.id}>{article.title}</li></Link>
                                 ))}
                             </ul>
                         </div>

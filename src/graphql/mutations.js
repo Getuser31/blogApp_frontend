@@ -80,6 +80,16 @@ export const TOGGLE_ARTICLE_FAVORITE = gql`
     }
 `;
 
+export const ADD_LAST_READ_ARTICLE = gql`
+    mutation addLastReadArticle($articleId: ID!) {
+        addLastReadArticle(articleId: $articleId) {
+            id
+        }
+    }
+`;
+
+
+
 // Comments Mutations
 
 export const ADD_COMMENT = gql`
