@@ -47,6 +47,17 @@ export const UPDATE_EMAIL = gql`
     }
 `;
 
+export const UPDATE_USER_STATUS = gql`
+    mutation UpdateUserStatus($id: ID!) {
+        updateUserStatus(userId: $id,) {
+            id
+            name
+            email
+            is_enabled
+        }
+    }
+`;
+
 // Article Mutations
 
 export const ADD_ARTICLE = gql`

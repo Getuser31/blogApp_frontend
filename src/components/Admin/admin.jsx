@@ -24,6 +24,11 @@ const Admin = () => {
                     >
                         Manage Categories
                     </li>
+                    <li className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer"
+                        onClick={() => navigate("/admin/listOfUsers")}
+                    >
+                        Manage Users
+                    </li>
                 </ul>
             </div>
         </div>
