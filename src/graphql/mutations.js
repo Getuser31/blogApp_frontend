@@ -50,11 +50,12 @@ export const UPDATE_EMAIL = gql`
 // Article Mutations
 
 export const ADD_ARTICLE = gql`
-    mutation AddArticle($title: String!, $content: String!, $categoryIds: [ID!], $images: [Upload!]) {
-        createArticle(title: $title, content: $content, categoryIds: $categoryIds, images: $images) {
+    mutation AddArticle($title: String!, $content: String!, $categoryIds: [ID!], $images: [Upload!], $publish: Boolean) {
+        createArticle(title: $title, content: $content, categoryIds: $categoryIds, images: $images, publish: $publish) {
             id
             title
             content
+            published
             categories {
                 id
                 name
@@ -107,6 +108,16 @@ export const ADD_LAST_READ_ARTICLE = gql`
         }
     }
 `;
+
+export const TOOGLE_PUBLISH_STATUS = gql`
+    mutation TogglePublishStatus($articleId: ID!, $publish: Boolean!) {
+        togglePublishStatus(articleId: $articleId, publish: $publish) {
+            id
+            published
+        }
+    }
+`;
+
 
 
 // Comments Mutations

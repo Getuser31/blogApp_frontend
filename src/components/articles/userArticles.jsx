@@ -1,6 +1,7 @@
 import React from "react";
-import {useQuery} from "@apollo/client/react";
+import {useMutation, useQuery} from "@apollo/client/react";
 import {USER_ARTICLES} from "../../graphql/queries.js";
+import {TOOGLE_PUBLISH_STATUS} from "../../graphql/mutations.js";
 
 const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -18,8 +19,18 @@ const formatDate = (timestamp) => {
 const userArticles = () => {
     const {loading, error, data} = useQuery(USER_ARTICLES)
 
+    const [mutateAsync, {loading: mutateLoading, error: mutateError}] = useMutation(TOOGLE_PUBLISH_STATUS)
+
     if (loading) return <p className="text-center mt-4 bg-[#A17141] text-gray-600">Loading...</p>
     if (error) return <p className="text-center mt-4 bg-[#A17141] text-red-500">Error: {error.message}</p>
+
+    const handlePublish = async (articleId, publish) => {
+        try {
+            await mutateAsync({variables: {articleId, publish}});
+        } catch (e) {
+            console.error('Failed to publish article:', e);
+        }
+    }
 
 
     return (
@@ -53,6 +64,7 @@ const userArticles = () => {
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <button
                                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${article.published ? 'bg-green-500' : 'bg-red-500'}`}
+                                        onClick={() => {handlePublish(article.id, !article.published)}}
                                     >
                                         <span
                                             className={`${article.published ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}

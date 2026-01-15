@@ -25,12 +25,12 @@ const router = createBrowserRouter([
             {path: '/userProfile', element: <UserProfile/>},
             {path: '/userArticles', element: <PublishedArticles/>},
             {path: '/favoriteArticle', element: <FavoriteArticles/>},
+            {path: "addArticle", element: <AddArticle/>},
             {
                 path: "admin",
                 element: <AdminLayout/>,
                 children: [
                     {index: true, element: <Admin/>},
-                    {path: "addArticle", element: <AddArticle/>},
                     {path: "categories", element: <Categories/>},
                 ],
             },

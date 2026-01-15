@@ -6,6 +6,7 @@ import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
 import Loading from "../../../utils/Loading";
 import Error from "../../../utils/Error";
 import ImageUpload from "./ImageUpload";
+import CategoryDropdown from "./CategoryDropdown";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
@@ -14,6 +15,7 @@ const AddArticle = () => {
     const [content, setContent] = useState("");
     const [categoryIds, setCategoryIds] = useState([]);
     const [images, setImages] = useState([]);
+    const [isPublished, setIsPublished] = useState(false);
     const navigate = useNavigate();
 
     const [addArticle, { loading, error }] = useMutation(ADD_ARTICLE, {
@@ -41,6 +43,7 @@ const AddArticle = () => {
                     content,
                     categoryIds, // e.g., ['1', '2']
                     images,      // This is your array of File objects
+                    publish: isPublished
                 },
             });
 
@@ -53,11 +56,6 @@ const AddArticle = () => {
         }
     };
 
-    const handleCategoryChange = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-        setCategoryIds(selectedOptions);
-    };
-
     if (categoriesLoading) {
         return <Loading />;
     }
@@ -67,10 +65,10 @@ const AddArticle = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
-            <h1 className="text-4xl font-extrabold text-indigo-400 mb-8">Add New Article</h1>
+        <div className="min-h-screen bg-[#A17141] text-white flex flex-col items-center p-8">
+            <h1 className="text-4xl font-extrabold text-white mb-8">Write...</h1>
 
-            <form onSubmit={handleSubmit} className="w-full max-w-2xl bg-gray-800 p-8 rounded-xl shadow-lg">
+            <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-gray-800 p-8 rounded-xl shadow-lg">
                 <div className="mb-6">
                     <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-300">Title</label>
                     <input
@@ -89,30 +87,33 @@ const AddArticle = () => {
                         theme="snow"
                         value={content}
                         onChange={setContent}
-                        className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[200px]"
+                        className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[500px]"
                     />
                 </div>
 
                 <div className="mb-6">
-                    <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-300">Category</label>
-                    <select
-                        id="category"
-                        multiple={true}
-                        value={categoryIds}
-                        onChange={handleCategoryChange}
-                        className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5"
-                    >
-                        <option value="" disabled>Select a category</option>
-                        {(categoriesData?.getCategories || []).map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
+                    <CategoryDropdown
+                        categories={categoriesData?.getCategories || []}
+                        selectedCategories={categoryIds}
+                        onCategoryChange={setCategoryIds}
+                    />
                 </div>
 
                 <div className="mb-6">
                     <ImageUpload onUpload={setImages} required={true} />
+                </div>
+
+                <div className="mb-6 flex items-center">
+                    <input
+                        type="checkbox"
+                        id="publish"
+                        checked={isPublished}
+                        onChange={(e) => setIsPublished(e.target.checked)}
+                        className="h-5 w-5 rounded border-gray-600 bg-gray-700 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-gray-800"
+                    />
+                    <label htmlFor="publish" className="ml-3 text-sm font-medium text-gray-300">
+                        Would you publish it directly?
+                    </label>
                 </div>
 
                 {error && (
