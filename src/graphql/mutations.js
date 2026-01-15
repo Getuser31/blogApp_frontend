@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 // User Mutations
 
@@ -25,7 +25,27 @@ export const ADD_USER = gql`
             email
         }
     }
-    `;
+`;
+
+export const UPDATE_PASSWORD = gql`
+    mutation UpdatePassword($oldPassword: String!, $password: String!, $passwordRepeat: String!) {
+        updatePassword(oldPassword: $oldPassword, password: $password, passwordRepeat: $passwordRepeat){
+            id
+            name
+            email
+        }
+    }
+`;
+
+export const UPDATE_EMAIL = gql`
+    mutation UpdateEmail($email: String!) {
+        updateEmail(email: $email) {
+            id
+            name
+            email
+        }
+    }
+`;
 
 // Article Mutations
 
@@ -87,7 +107,6 @@ export const ADD_LAST_READ_ARTICLE = gql`
         }
     }
 `;
-
 
 
 // Comments Mutations
