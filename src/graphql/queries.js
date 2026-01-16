@@ -1,13 +1,13 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 // Article Queries
 
 export const GET_ARTICLES = gql`
     query GetArticles($category_id: ID, $page: Int) {
         publishedArticles(
-         first: 10, 
-         page: $page, 
-         category_id: $category_id
+            first: 10,
+            page: $page,
+            category_id: $category_id
         ) {
             data {
                 id
@@ -50,7 +50,7 @@ export const GET_ARTICLE = gql`
             }
             comments {
                 id
-                content 
+                content
                 created_at
                 user {
                     id
@@ -63,35 +63,35 @@ export const GET_ARTICLE = gql`
 `;
 
 export const SEARCH_ARTICLES = gql`
- query SearchArticles($query: String!) {
-  searchArticles(search: $query) {
-   data {
-    id
-    title
-   }
-   paginatorInfo {
-    currentPage
-    lastPage
-    hasMorePages
-    total
-   }
-  }
- }
+    query SearchArticles($query: String!) {
+        searchArticles(search: $query) {
+            data {
+                id
+                title
+            }
+            paginatorInfo {
+                currentPage
+                lastPage
+                hasMorePages
+                total
+            }
+        }
+    }
 `;
 
 // User Queries
 
 export const ME_QUERY = gql`
-     query Me {
-         me {
-             id
-             name
-             role {
-                 name
-             }
-         }
-     }
- `;
+    query Me {
+        me {
+            id
+            name
+            role {
+                name
+            }
+        }
+    }
+`;
 
 export const GET_USERS = gql`
     query users {
@@ -177,12 +177,28 @@ export const GET_FAVORITE_ARTICLES = gql`
         getFavoriteArticles {
             id
             favoriteArticles {
-             id
-             title
+                id
+                title
             }
         }
     }
 `
+
+export const GET_ADMIN_USER_PROFILE = gql`
+    query GetAdminUserProfile($userId: ID!) {
+        getUserData(id: $userId) {
+            id
+            name
+            email
+            role {
+                id
+                name
+            }
+            created_at
+            is_enabled
+        }
+    }
+`;
 
 
 // Category Queries
@@ -190,6 +206,16 @@ export const GET_FAVORITE_ARTICLES = gql`
 export const GET_CATEGORIES = gql`
     query GetCategories {
         getCategories {
+            id
+            name
+        }
+    }
+`;
+
+//Role Queries
+export const GET_ROLES = gql`
+    query GetRoles {
+        getRoles {
             id
             name
         }

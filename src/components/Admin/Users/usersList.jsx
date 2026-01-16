@@ -2,6 +2,8 @@ import React from "react";
 import {GET_USERS} from "../../../graphql/queries.js";
 import {useMutation, useQuery} from "@apollo/client/react";
 import {UPDATE_USER_STATUS} from "../../../graphql/mutations.js";
+import { FaPen } from "react-icons/fa";
+import {Link} from "react-router-dom";
 
 const UsersList = () => {
     const {loading, error, data} = useQuery(GET_USERS);
@@ -31,13 +33,14 @@ const UsersList = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Role</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Enabled</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Edit</th>
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-700">
                         {data && data.users.map(user => (
                             <tr key={user.id} className="hover:bg-gray-700 transition-colors duration-200">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.id}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.username}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.role.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
@@ -45,6 +48,11 @@ const UsersList = () => {
                                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full cursor-pointer ${user.is_enabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                         {user.is_enabled ? 'Yes' : 'No'}
                                     </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <Link to={`/admin/user/${user.id}`} className="flex items-center text-indigo-400 hover:text-indigo-300 transition-colors duration-200">
+                                        <FaPen className="mr-2" />
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

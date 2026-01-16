@@ -58,6 +58,21 @@ export const UPDATE_USER_STATUS = gql`
     }
 `;
 
+export const UPDATE_USER_ROLE = gql`
+    mutation updateRole($userId: ID!, $roleId: ID!) {
+        updateRole(userId: $userId, roleId: $roleId) {
+            id
+            name
+            email
+            is_enabled
+            role {
+                id
+                name
+            }
+        }
+    }
+`;
+
 // Article Mutations
 
 export const ADD_ARTICLE = gql`
@@ -128,7 +143,6 @@ export const TOOGLE_PUBLISH_STATUS = gql`
         }
     }
 `;
-
 
 
 // Comments Mutations
