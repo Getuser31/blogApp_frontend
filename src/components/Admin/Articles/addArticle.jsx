@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { useNavigate } from "react-router-dom";
 import { ADD_ARTICLE } from "../../../graphql/mutations";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
-import Loading from "../../../utils/Loading";
+import Loading from "../../../utils/loading";
 import Error from "../../../utils/Error";
 import ImageUpload from "./ImageUpload";
 import CategoryDropdown from "./CategoryDropdown";
