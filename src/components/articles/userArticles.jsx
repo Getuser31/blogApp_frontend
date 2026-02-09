@@ -2,6 +2,7 @@ import React from "react";
 import {useMutation, useQuery} from "@apollo/client/react";
 import {USER_ARTICLES} from "../../graphql/queries.js";
 import {TOOGLE_PUBLISH_STATUS} from "../../graphql/mutations.js";
+import {Link} from "react-router-dom";
 
 const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -56,7 +57,7 @@ const userArticles = () => {
                         {data.userArticles.articles.map(article => (
                             <tr key={article.id} className="hover:bg-gray-50">
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <p className="text-gray-900 whitespace-no-wrap font-medium">{article.title}</p>
+                                    <Link to={`/article/${article.id}`}><p className="text-gray-900 whitespace-no-wrap font-medium">{article.title}</p></Link>
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <p className="text-gray-600 whitespace-no-wrap">{formatDate(article.created_at)}</p>
