@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ADD_ARTICLE } from "../../../graphql/mutations";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
 import Loading from "../../../utils/loading";
-import Error from "../../../utils/Error";
+import Error from "../../../utils/error";
 import ImageUpload from "./ImageUpload";
 import CategoryDropdown from "./CategoryDropdown";
 import ReactQuill from 'react-quill-new';
