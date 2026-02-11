@@ -3,6 +3,12 @@ import { useQuery } from "@apollo/client/react";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../graphql/queries.js";
 import { useNavigate } from "react-router-dom";
 
+const stripHtml = (html) => {
+    if (!html) return "";
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
+
 const Articles = ({ categoryId }) => {
     const [selectedCategory, setSelectedCategory] = useState(categoryId || "");
     const { loading, error, data, fetchMore, refetch } = useQuery(GET_ARTICLES, {
@@ -106,7 +112,7 @@ const Articles = ({ categoryId }) => {
                         <div className="p-6">
                             <h2 className="text-xl font-bold mb-2">{article.title}</h2>
                             <p className="text-gray-700 text-sm">
-                                {article.content.substring(0, 150)}...
+                                {stripHtml(article.content).substring(0, 150)}...
                             </p>
                         </div>
                     </div>
