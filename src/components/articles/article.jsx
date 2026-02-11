@@ -125,7 +125,7 @@ const Article = () => {
 
                     <div
                         className="text-justify text-black text-lg font-normal font-serif leading-8 break-words whitespace-normal [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-stone-400 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:mb-6 [&_img]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:bg-gray-100 [&_pre]:p-4 [&_pre]:rounded"
-                        dangerouslySetInnerHTML={{__html: article.content}}
+                        dangerouslySetInnerHTML={{__html: article.content.replace(/&nbsp;/g, ' ')}}
                     />
 
                     {article.images && article.images.length > 1 && (
