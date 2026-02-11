@@ -11,6 +11,7 @@ import Registration from "./components/user/registration.jsx";
 import UserProfile from "./components/user/userProfile.jsx";
 import PublishedArticles from "./components/articles/userArticles.jsx";
 import Categories from "./components/Admin/categories.jsx";
+import Category from "./components/categories/category.jsx";
 import FavoriteArticles from "./components/user/favoriteArticles.jsx";
 import UsersList from "./components/Admin/Users/usersList.jsx";
 import AdminUserProfile from "./components/Admin/Users/adminUserProfile.jsx";
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
                 ],
             },
             {path: '/article/:id', element: <Article/>},
+            {path: '/category/:category', element: <Category/>},
             {
                 path: '/articles',
                 element: (

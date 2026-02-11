@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client/react";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../graphql/queries.js";
 import { useNavigate } from "react-router-dom";
 
-const Articles = () => {
-    const [selectedCategory, setSelectedCategory] = useState("");
+const Articles = ({ categoryId }) => {
+    const [selectedCategory, setSelectedCategory] = useState(categoryId || "");
     const { loading, error, data, fetchMore, refetch } = useQuery(GET_ARTICLES, {
         variables: { page: 1, category_id: selectedCategory || undefined },
     });
     const { data: categoriesData } = useQuery(GET_CATEGORIES);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (categoryId) {
+            setSelectedCategory(categoryId);
+            refetch({ page: 1, category_id: categoryId });
+        }
+    }, [categoryId, refetch]);
 
     if (loading && !data) {
         return (
