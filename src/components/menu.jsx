@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../AuthContext.jsx";
-import {FaUser, FaEdit} from "react-icons/fa";
+import {FaUser, FaEdit, FaBars, FaTimes} from "react-icons/fa";
 import {useLazyQuery} from "@apollo/client/react";
 import {SEARCH_ARTICLES} from "../graphql/queries.js";
 
@@ -12,6 +12,7 @@ const Menu = () => {
     const [search, setSearch] = useState('')
     const [searchArticles, {loading, error, data}] = useLazyQuery(SEARCH_ARTICLES);
     const [searchResultIsHidden, setSearchResultIsHidden] = useState(true)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = async () => {
         logout();
@@ -34,6 +35,10 @@ const Menu = () => {
             return;
         }
         setSearchResultIsHidden(true);
+    }
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
     }
 
     const isAdmin = user && user.role?.toUpperCase() === 'ADMIN';
@@ -66,14 +71,21 @@ const Menu = () => {
                                 BLOG APP
                             </Link>
                         </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="relative" onBlur={handleSearchBlur}>
+
+                        <div className="md:hidden z-50">
+                            <button onClick={toggleMobileMenu} className="text-gray-500 hover:text-gray-900 focus:outline-none focus:text-gray-900">
+                                {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                            </button>
+                        </div>
+
+                        <div className={`${isMobileMenuOpen ? 'flex flex-col absolute top-16 left-0 w-full bg-white shadow-md p-4 z-40 space-y-4' : 'hidden'} md:flex md:flex-row md:static md:w-auto md:shadow-none md:p-0 md:space-y-0 md:space-x-4 items-center`}>
+                            <div className="relative w-full md:w-auto" onBlur={handleSearchBlur}>
                                 <input
                                     value={search}
                                     onChange={handleSearch}
                                     type="search"
                                     placeholder="Search..."
-                                    className="bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+                                    className="w-full md:w-auto bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
                                 />
                                 {!searchResultIsHidden && (
                                     <div className="absolute left-0 mt-2 w-full bg-white rounded-xl shadow-2xl py-2 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
