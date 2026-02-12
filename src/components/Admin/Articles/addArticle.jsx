@@ -10,6 +10,31 @@ import CategoryDropdown from "./CategoryDropdown";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
+const modules = {
+    toolbar: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'align': [] }],
+        ['link'],
+        ['clean']
+    ],
+};
+
+const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block',
+    'script',
+    'list', 'bullet', 'indent',
+    'color', 'background',
+    'align',
+    'link',
+];
+
 const AddArticle = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -87,6 +112,8 @@ const AddArticle = () => {
                         theme="snow"
                         value={content}
                         onChange={setContent}
+                        modules={modules}
+                        formats={formats}
                         className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[500px]"
                     />
                 </div>
