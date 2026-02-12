@@ -15,6 +15,7 @@ import Category from "./components/categories/category.jsx";
 import FavoriteArticles from "./components/user/favoriteArticles.jsx";
 import UsersList from "./components/Admin/Users/usersList.jsx";
 import AdminUserProfile from "./components/Admin/Users/adminUserProfile.jsx";
+import AuthorProfile from "./components/author/authorProfile.jsx";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
             },
             {path: '/article/:id', element: <Article/>},
             {path: '/category/:category', element: <Category/>},
+            {path: '/author/:author', element: <AuthorProfile/>},
             {
                 path: '/articles',
                 element: (

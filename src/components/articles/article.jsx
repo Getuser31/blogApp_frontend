@@ -106,7 +106,7 @@ const Article = () => {
                     </div>
 
                     <div className="text-stone-400 text-lg font-normal font-serif capitalize mb-8">
-                        <div>By {article.author.name}</div>
+                        <div><Link to={`/author/${article.author.name}`}>By {article.author.name}</Link></div>
                         <div className="flex justify-between items-center">
                             <span>Published on {formattedDate}</span>
                             <span onClick={handleFavorite}

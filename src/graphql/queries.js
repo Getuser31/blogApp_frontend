@@ -200,6 +200,40 @@ export const GET_ADMIN_USER_PROFILE = gql`
     }
 `;
 
+export const GET_AUTHOR_PROFILE = gql`
+    query GetAuthorProfile($author: String!, $page: Int = 1) {
+        userByName(name: $author) {
+            id
+            name
+            created_at
+            paginatedArticles(first: 10, page: $page) {
+                data {
+                    id
+                    title
+                    content
+                    created_at
+                    published
+                    categories {
+                        id
+                        name
+                    }
+                    images {
+                        id
+                        path
+                    }
+                }
+                paginatorInfo {
+                    total
+                    currentPage
+                    lastPage
+                    hasMorePages
+                }
+            }
+        }
+    }
+`;
+
+
 
 // Category Queries
 
