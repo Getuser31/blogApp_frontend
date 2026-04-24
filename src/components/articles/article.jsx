@@ -115,35 +115,11 @@ const Article = () => {
                     </div>
                 </div>
 
-                {article.images && article.images.length > 0 && (
-                    <div className="mb-8 flex justify-center">
-                        <img className="max-w-full h-auto rounded-md shadow-sm" src={article.images[0].path}
-                             alt={article.title}/>
-                    </div>
-                )}
-
                 <div
-                    className="text-justify text-black text-lg font-normal font-serif leading-8 break-words whitespace-normal [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-stone-400 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:mb-6 [&_img]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:bg-gray-100 [&_pre]:p-4 [&_pre]:rounded"
+                    className="text-justify text-black text-lg font-normal font-serif leading-8 break-words whitespace-normal [&_p]:mb-6 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_blockquote]:border-l-4 [&_blockquote]:border-stone-400 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:mb-6 [&_img]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:bg-gray-100 [&_pre]:p-4 [&_pre]:rounded [&_.ql-align-center]:text-center [&_.ql-align-right]:text-right [&_.ql-align-justify]:text-justify [&_.ql-align-left]:text-left"
                     dangerouslySetInnerHTML={{__html: article.content.replace(/&nbsp;/g, ' ')}}
                 />
 
-                {article.images && article.images.length > 1 && (
-                    <div className="mt-12">
-                        <h2 className="text-black text-3xl font-['Ubuntu_Condensed'] mb-4">Gallery</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {article.images.slice(1).map((image) => (
-                                <div key={image.id}
-                                     className="flex justify-center items-center overflow-hidden rounded-md shadow-sm">
-                                    <img
-                                        src={image.path}
-                                        alt={image.path}
-                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
                 {isAuthor && (
                     <div className="mt-8 flex justify-end">
                         <button

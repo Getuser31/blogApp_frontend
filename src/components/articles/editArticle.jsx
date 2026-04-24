@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {useMutation, useQuery} from "@apollo/client/react";
 import {GET_ARTICLE, GET_CATEGORIES} from "../../graphql/queries.js";
 import Loading from "../../utils/loading.jsx";
 import Error from "../../utils/error.jsx";
 import {Link, useParams, useNavigate} from "react-router-dom";
-import {DELETE_IMAGE, EDIT_ARTICLE} from "../../graphql/mutations.js";
+import {EDIT_ARTICLE, DELETE_IMAGE} from "../../graphql/mutations.js";
 import ImageUpload from "../Admin/Articles/ImageUpload.jsx";
-import ReactQuill from 'react-quill-new';
+import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import QuillResize from 'quill-resize-module';
+import 'quill-resize-module/dist/resize.css';
+
+// Register the image resize module globally for all instances
+Quill.register('modules/resize', QuillResize);
+
+// Override the Image blot's sanitize to allow blob: URLs for local preview of uploaded images
+const ImageBlot = Quill.import('formats/image');
+const OriginalSanitize = ImageBlot.sanitize;
+ImageBlot.sanitize = function (url) {
+  if (/^blob:/.test(url)) {
+    return url;
+  }
+  return OriginalSanitize.call(this, url);
+};
 
 const modules = {
     toolbar: [
@@ -19,9 +34,12 @@ const modules = {
         [{ 'script': 'sub'}, { 'script': 'super' }],
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
         [{ 'align': [] }],
-        ['link'],
+        ['link', 'image'],
         ['clean']
     ],
+    resize: {
+        modules: ['DisplaySize', 'Toolbar', 'Resize'],
+    },
 };
 
 const formats = [
@@ -31,17 +49,81 @@ const formats = [
     'list', 'bullet', 'indent',
     'color', 'background',
     'align',
-    'link',
+    'link', 'image',
 ];
 
 const EditArticle = () => {
     const {id} = useParams();
     const navigate = useNavigate();
+    const quillRef = useRef(null);
     const [message, setMessage] = React.useState('');
     const [content, setContent] = React.useState('');
+    const [images, setImages] = useState([]);
+    const isReplacingRef = useRef(false);
+    // Maps blob URL -> file index for inline images in the editor
+    const blobToFileIndexRef = useRef({});
+    // Store submitted values in refs so they're available in onCompleted callbacks
+    const submittedTitleRef = useRef('');
+    const submittedCategoriesRef = useRef([]);
+    // Store the placeholder-version of content so onCompleted can replace them with server paths
+    const placeholderContentRef = useRef('');
     const {loading, error, data} = useQuery(GET_ARTICLE, {variables: {id}});
     const {data: categoriesData} = useQuery(GET_CATEGORIES)
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [editArticle, {loading: editLoading}] = useMutation(EDIT_ARTICLE, {
+        onCompleted: async (result) => {
+            // If the replacement call completed, navigate.
+            if (isReplacingRef.current) {
+                navigate(`/article/${id}`);
+                return;
+            }
+
+            const uploadedImages = result?.editArticle?.images || [];
+
+            // Work with the placeholder-version of content that was actually saved
+            let updatedContent = placeholderContentRef.current;
+            let hasPlaceholders = false;
+
+            if (uploadedImages.length > 0) {
+                const placeholderRegex = /\[img-(\d+)\]/g;
+                let match;
+                while ((match = placeholderRegex.exec(updatedContent)) !== null) {
+                    const fullMatch = match[0];
+                    const placeholderId = parseInt(match[1], 10);
+                    if (placeholderId < uploadedImages.length) {
+                        const serverPath = uploadedImages[placeholderId]?.path;
+                        if (serverPath) {
+                            const imgTag = `<img src="${serverPath}" alt="inline image" style="max-width:100%;height:auto;" />`;
+                            updatedContent = updatedContent.replace(fullMatch, imgTag);
+                            hasPlaceholders = true;
+                        }
+                    }
+                }
+            }
+
+            if (hasPlaceholders) {
+                isReplacingRef.current = true;
+                try {
+                    await editArticle({
+                        variables: {
+                            id,
+                            title: submittedTitleRef.current,
+                            content: updatedContent,
+                            categoryIds: submittedCategoriesRef.current,
+                        },
+                    });
+                } finally {
+                    isReplacingRef.current = false;
+                }
+                return;
+            }
+
+            navigate(`/article/${id}`);
+        },
+        onError: (error) => {
+            console.error("Error editing article", error);
+        }
+    });
 
     useEffect(() => {
         if (data?.article?.content) {
@@ -51,15 +133,6 @@ const EditArticle = () => {
             setSelectedCategories(data.article.categories.map(c => c.id));
         }
     }, [data]);
-
-    const [editArticle] = useMutation(EDIT_ARTICLE, {
-        onCompleted: () => {
-            navigate(`/article/${id}`);
-        },
-        onError: (error) => {
-            console.error("Error editing article", error);
-        }
-    });
 
     const [removeImage] = useMutation(DELETE_IMAGE, {
         update(cache, {data: {deleteImage}}) {
@@ -83,6 +156,39 @@ const EditArticle = () => {
         }
     })
 
+    // Insert an actual image into the editor using an object URL
+    const handleInsertImage = (previewUrl, file) => {
+        const editor = quillRef.current?.getEditor();
+        if (!editor) return;
+
+        const range = editor.getSelection(true);
+        const index = range ? range.index : editor.getLength();
+
+        // Find the file index in the images array
+        const fileIndex = images.indexOf(file);
+        if (fileIndex === -1) return;
+
+        // Create an object URL so the image is visible in the editor
+        const objectUrl = URL.createObjectURL(file);
+        blobToFileIndexRef.current[objectUrl] = fileIndex;
+
+        // Insert the actual image — user can resize and align it
+        editor.insertEmbed(index, 'image', objectUrl);
+        editor.setSelection(index + 1);
+    };
+
+    // Convert blob URLs to placeholders before saving
+    const prepareContentForSave = (htmlContent) => {
+        let prepared = htmlContent;
+        Object.keys(blobToFileIndexRef.current).forEach((blobUrl) => {
+            const fileIndex = blobToFileIndexRef.current[blobUrl];
+            const escapedUrl = blobUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const imgRegex = new RegExp(`<img[^>]*src="${escapedUrl}"[^>]*>`, 'g');
+            prepared = prepared.replace(imgRegex, `[img-${fileIndex}]`);
+        });
+        return prepared;
+    };
+
     if (loading) {
         return <Loading/>
     }
@@ -97,16 +203,24 @@ const EditArticle = () => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const title = formData.get('title');
-        const images = formData.getAll('images');
-        const validImages = images.filter(file => file.size > 0);
 
         if (!title || !content) {
             return;
         }
-        
-        const variables = {id, title, content, categoryIds: selectedCategories};
-        if (validImages.length > 0) {
-            variables.images = validImages;
+
+        // Store current values for use in onCompleted callback
+        submittedTitleRef.current = title;
+        submittedCategoriesRef.current = selectedCategories;
+
+        // Replace blob URLs with placeholders before sending to the server
+        const contentForSave = prepareContentForSave(content);
+
+        // Store the placeholder version so onCompleted can replace [img-X] with server URLs
+        placeholderContentRef.current = contentForSave;
+
+        const variables = {id, title, content: contentForSave, categoryIds: selectedCategories};
+        if (images.length > 0) {
+            variables.images = images;
         }
 
         editArticle({variables});
@@ -137,6 +251,7 @@ const EditArticle = () => {
                 <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg shadow-lg p-8">
                     <div className="flex justify-between items-center mb-4">
                         <input
+                            id="edit-title"
                             type="text"
                             name="title"
                             defaultValue={article.title}
@@ -168,25 +283,36 @@ const EditArticle = () => {
                             ))}
                         </div>
                     </div>
-                    
+
                     <div className="mb-8">
-                        <ReactQuill 
+                        <ReactQuill
+                            ref={quillRef}
                             theme="snow"
-                            value={content} 
-                            onChange={setContent} 
+                            value={content}
+                            onChange={setContent}
                             modules={modules}
                             formats={formats}
                             className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[200px]"
                         />
                     </div>
 
-                    <ImageUpload required={false}/>
+                    <div className="mb-4">
+                        <p className="text-gray-400 text-xs mb-2">
+                            Upload images, then hover a thumbnail and click <strong>"Insert in text"</strong>. The image appears directly in the editor — you can resize it by dragging corners, or align it with the toolbar.
+                        </p>
+                        <ImageUpload
+                            required={false}
+                            onUpload={setImages}
+                            onInsertImage={handleInsertImage}
+                        />
+                    </div>
                     <div className="flex justify-end mt-8">
                         <button
                             type="submit"
-                            className="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+                            disabled={editLoading}
+                            className="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 disabled:opacity-60"
                         >
-                            Save Changes
+                            {editLoading ? 'Saving...' : 'Save Changes'}
                         </button>
                     </div>
                 </form>
