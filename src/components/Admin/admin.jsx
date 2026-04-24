@@ -10,7 +10,7 @@ const Admin = () => {
                 <h1 className="text-4xl font-extrabold text-indigo-400 mb-8">Admin Panel</h1>
                 <ul className="space-y-4">
                     <li className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer"
-                        onClick={() => navigate("/addArticle")}
+                        onClick={() => navigate("/admin/addArticle")}
                     >
                         Add Article
                     </li>

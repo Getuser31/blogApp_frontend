@@ -35,6 +35,7 @@ const router = createBrowserRouter([
                 element: <AdminLayout/>,
                 children: [
                     {index: true, element: <Admin/>},
+                    {path: "addArticle", element: <AddArticle/>},
                     {path: "categories", element: <Categories/>},
                     {path: "listOfUsers", element: <UsersList/>},
                     {path: "user/:id", element: <AdminUserProfile/>},
