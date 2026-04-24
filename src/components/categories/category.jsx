@@ -12,17 +12,15 @@ const Category = () => {
 
     if (!categoryId) {
         return (
-            <div className="bg-[#A17141] min-h-screen flex items-center justify-center">
+            <div className="flex items-center justify-center py-20">
                 <p className="text-white text-2xl font-serif">Loading category...</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-[#A17141] min-h-screen">
-            <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                <Articles categoryId={categoryId}/>
-            </main>
+        <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <Articles categoryId={categoryId}/>
         </div>
     );
 }

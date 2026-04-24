@@ -22,8 +22,8 @@ const userArticles = () => {
 
     const [mutateAsync, {loading: mutateLoading, error: mutateError}] = useMutation(TOOGLE_PUBLISH_STATUS)
 
-    if (loading) return <p className="text-center mt-4 bg-[#A17141] text-gray-600">Loading...</p>
-    if (error) return <p className="text-center mt-4 bg-[#A17141] text-red-500">Error: {error.message}</p>
+    if (loading) return <p className="text-center mt-4 text-white">Loading...</p>
+    if (error) return <p className="text-center mt-4 text-red-500">Error: {error.message}</p>
 
     const handlePublish = async (articleId, publish) => {
         try {
@@ -35,8 +35,8 @@ const userArticles = () => {
 
 
     return (
-        <div className="bg-[#A17141] font-mono">
-            <div className="container mx-auto bg-[#A17141] px-4 py-8">
+        <div className="font-mono py-8 px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto">
                 <h1 className="text-3xl font-bold mb-6 text-white">Published Articles</h1>
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="min-w-full leading-normal">

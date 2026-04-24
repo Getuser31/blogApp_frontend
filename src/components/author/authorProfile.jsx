@@ -8,8 +8,8 @@ const AuthorProfile = () => {
     const authorName = useParams();
 
     const {loading, error, data, fetchMore} = useQuery(GET_AUTHOR_PROFILE, {variables: {author: authorName.author, page: 1}})
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+    if (loading) return <p className="text-white text-center py-20">Loading...</p>;
+    if (error) return <p className="text-red-200 text-center py-20">Error: {error.message}</p>;
     const authorProfile = data.userByName;
     console.log(authorProfile)
 
@@ -40,7 +40,7 @@ const AuthorProfile = () => {
     }
     return(
         <>
-            <div className="min-h-screen bg-[#A17141] pt-10 pb-10">
+            <div className="py-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
                     <div className="flex items-center space-x-4 mb-6">
                         <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold text-white">

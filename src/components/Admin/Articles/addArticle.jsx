@@ -90,7 +90,7 @@ const AddArticle = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#A17141] text-white flex flex-col items-center p-8">
+        <div className="text-white flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-extrabold text-white mb-8">Write...</h1>
 
             <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-gray-800 p-8 rounded-xl shadow-lg">

@@ -40,11 +40,11 @@ const UserProfile = () => {
     const lastReadArticles = userData?.lastReadArticles;
 
     if (loading || authLoading || !userData) {
-        return <div className="min-h-screen bg-[#A17141] p-8 font-mono text-white">Loading...</div>;
+        return <div className="p-8 font-mono text-white text-center">Loading...</div>;
     }
 
     if (error) {
-        return <div className="min-h-screen bg-[#A17141] p-8 font-mono text-white">Error: {error.message}</div>;
+        return <div className="p-8 font-mono text-white text-center">Error: {error.message}</div>;
     }
 
     const handlePasswordChange = (e) => {
@@ -170,11 +170,11 @@ const UserProfile = () => {
             console.error('Email update failed:', e.message);
             setFormErrors({emailForm: e.message});
         }
-        
+
     }
 
     return (
-        <div className="min-h-screen bg-[#A17141] p-8 font-mono">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 font-mono">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 {/* Profile Card */}

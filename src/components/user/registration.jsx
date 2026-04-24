@@ -12,11 +12,11 @@ const Registration = () => {
     });
     const [validationError, setValidationError] = useState('');
     const navigate = useNavigate()
-    
+
     const [addUser, {loading, error: apiError}] = useMutation(ADD_USER, {
         onCompleted: () => {
             navigate('/login')
-        }, 
+        },
         onError: (error) => {
             setValidationError(error.message)
         }
@@ -42,27 +42,27 @@ const Registration = () => {
             setValidationError("Passwords do not match");
             return;
         }
-        
+
         try {
-            await addUser({ 
-                variables: { 
-                    username: user.username, 
-                    email: user.email, 
-                    password: user.password, 
-                    passwordRepeat: user.repeatPassword 
-                } 
+            await addUser({
+                variables: {
+                    username: user.username,
+                    email: user.email,
+                    password: user.password,
+                    passwordRepeat: user.repeatPassword
+                }
             })
         }
         catch (error) {
             console.log(error)
         }
     }
-    
+
     return (
-        <div className="bg-[#A17141] min-h-screen flex items-center justify-center">
+        <div className="flex items-center justify-center py-12">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Registration Page</h1>
-                
+
                 {validationError && (
                     <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
                         {validationError}

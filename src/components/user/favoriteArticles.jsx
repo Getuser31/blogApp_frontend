@@ -10,7 +10,7 @@ const FavoriteArticles = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#A17141] flex items-center justify-center">
+            <div className="flex items-center justify-center py-20">
                 <p className="text-white text-2xl font-serif">Loading favorite articles...</p>
             </div>
         );
@@ -18,22 +18,22 @@ const FavoriteArticles = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#A17141] flex items-center justify-center">
+            <div className="flex items-center justify-center py-20">
                 <p className="text-red-200 text-2xl font-serif">Error: {error.message}</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#A17141] p-8 font-mono">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 font-mono">
             <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl font-bold text-white mb-8 text-center font-serif">Your Favorite Articles</h1>
-                
+
                 {favoriteArticles && favoriteArticles.length > 0 ? (
                     <div className="grid gap-6">
                         {favoriteArticles.map((article) => (
-                            <Link 
-                                key={article.id} 
+                            <Link
+                                key={article.id}
                                 to={`/article/${article.id}`}
                                 className="block bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
                             >

@@ -27,9 +27,9 @@ const Articles = ({ categoryId }) => {
 
     if (loading && !data) {
         return (
-            <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6 font-sans">
+            <div className="flex items-center justify-center py-20 font-sans">
                 <div className="text-center">
-                    <p>Loading articles...</p>
+                    <p className="text-white">Loading articles...</p>
                 </div>
             </div>
         );
@@ -37,7 +37,7 @@ const Articles = ({ categoryId }) => {
 
     if (error) {
         return (
-            <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6 text-red-500 font-sans">
+            <div className="flex items-center justify-center py-20 text-red-500 font-sans">
                 <p>Error loading articles: {error.message}</p>
             </div>
         );
@@ -84,8 +84,8 @@ const Articles = ({ categoryId }) => {
         <div className="container mx-auto p-6">
             <div className="mb-6">
                 <h3 className="text-lg font-bold mb-2">Filter By Categories</h3>
-                <select 
-                    onChange={handleCategoryFilter} 
+                <select
+                    onChange={handleCategoryFilter}
                     value={selectedCategory}
                     className="p-2 border rounded bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
@@ -119,7 +119,7 @@ const Articles = ({ categoryId }) => {
                 ))}
             </div>
             {data?.publishedArticles?.paginatorInfo?.hasMorePages && (
-                <button 
+                <button
                     className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
                     onClick={handleLoadMore}
                 >

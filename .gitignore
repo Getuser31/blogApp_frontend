@@ -26,3 +26,7 @@ dist-ssr
  # Local environment variables
  .env.development
  node_modules
+.env
+.npmrc
+public/icon.jpg
+.env.development
