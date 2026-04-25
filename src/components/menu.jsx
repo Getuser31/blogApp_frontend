@@ -58,17 +58,10 @@ const Menu = () => {
         <>
             <header className="bg-white shadow-sm">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
+                    <div className="flex items-center justify-between h-20">
                         <div className="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="56" fill="none"
-                                 viewBox="0 0 60 56">
-                                <path stroke="#000" strokeLinecap="round" strokeLinejoin="round"
-                                      d="M10 51.333h40c1.326 0 2.598-.491 3.535-1.366S55 47.904 55 46.667V9.333c0-1.237-.527-2.424-1.465-3.3-.937-.875-2.209-1.366-3.535-1.366H20c-1.326 0-2.598.491-3.535 1.366S15 8.096 15 9.333v37.334c0 1.237-.527 2.424-1.464 3.3-.938.875-2.21 1.366-3.536 1.366m0 0c-1.326 0-2.598-.491-3.536-1.366C5.527 49.09 5 47.904 5 46.667v-21C5 23.1 7.25 21 10 21h5M45 32.667H25M37.5 42H25"/>
-                                <path stroke="#000" strokeLinecap="round" strokeLinejoin="round"
-                                      d="M25 14h20v9.333H25z"/>
-                            </svg>
-                            <Link to="/" className="text-2xl font-bold text-gray-900 ml-4">
-                                BLOG APP
+                            <Link to="/" className="flex items-center">
+                                <img src="/logo.png" alt="Blog App Logo" className="h-20 w-auto" />
                             </Link>
                         </div>
 
@@ -78,7 +71,7 @@ const Menu = () => {
                             </button>
                         </div>
 
-                        <div className={`${isMobileMenuOpen ? 'flex flex-col absolute top-16 left-0 w-full bg-white shadow-md p-4 z-40 space-y-4' : 'hidden'} md:flex md:flex-row md:static md:w-auto md:shadow-none md:p-0 md:space-y-0 md:space-x-4 items-center`}>
+                        <div className={`${isMobileMenuOpen ? 'flex flex-col absolute top-20 left-0 w-full bg-white shadow-md p-4 z-40 space-y-4' : 'hidden'} md:flex md:flex-row md:static md:w-auto md:shadow-none md:p-0 md:space-y-0 md:space-x-4 items-center`}>
                             <div className="relative w-full md:w-auto" onBlur={handleSearchBlur}>
                                 <input
                                     value={search}
