@@ -47,7 +47,7 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
 
     return (
         <div>
-            <label htmlFor="images" className="block mb-2 text-sm font-medium text-gray-300">
+            <label htmlFor="images" className="block mb-2 text-sm font-medium text-gray-700">
                 Images
             </label>
             <input
@@ -57,7 +57,7 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
                 multiple
                 required={required}
                 onChange={handleFileChange}
-                className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-indigo-600 file:text-white file:text-sm file:font-medium hover:file:bg-indigo-500"
+                className="w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-indigo-50 file:text-indigo-700 file:text-sm file:font-semibold hover:file:bg-indigo-100 transition-colors"
             />
             <div className="mt-4 flex flex-wrap gap-4">
                 {previews.map((preview, index) => (
@@ -65,15 +65,15 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
                         <img
                             src={preview}
                             alt={`Preview ${index}`}
-                            className="w-32 h-32 object-cover rounded-lg border border-gray-600"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
                         />
                         <button
                             type="button"
                             onClick={() => handleInsertClick(preview, index)}
-                            className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg cursor-pointer"
+                            className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg cursor-pointer backdrop-blur-sm"
                             title="Click to insert this image into the editor at cursor position"
                         >
-                            <span className="text-white text-xs font-semibold bg-indigo-600 px-2 py-1 rounded">
+                            <span className="text-white text-xs font-semibold bg-indigo-600 px-3 py-1.5 rounded-full shadow-sm">
                                 Insert in text
                             </span>
                         </button>
@@ -81,8 +81,8 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
                 ))}
             </div>
             {previews.length > 0 && (
-                <p className="text-xs text-gray-400 mt-2">
-                    Hover an image and click <strong>"Insert in text"</strong> to place it at your cursor position in the editor
+                <p className="text-xs text-gray-500 mt-3 font-medium">
+                    Hover an image and click <strong className="text-gray-700">"Insert in text"</strong> to place it at your cursor position in the editor
                 </p>
             )}
         </div>

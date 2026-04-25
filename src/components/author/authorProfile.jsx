@@ -3,13 +3,14 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client/react";
 import {GET_AUTHOR_PROFILE} from "../../graphql/queries";
 import formatDate from "../../utils/formatDate.js";
+import {Link} from "react-router-dom";
 
 const AuthorProfile = () => {
     const authorName = useParams();
 
     const {loading, error, data, fetchMore} = useQuery(GET_AUTHOR_PROFILE, {variables: {author: authorName.author, page: 1}})
-    if (loading) return <p className="text-white text-center py-20">Loading...</p>;
-    if (error) return <p className="text-red-200 text-center py-20">Error: {error.message}</p>;
+    if (loading) return <p className="text-gray-600 text-center py-20 font-medium">Loading...</p>;
+    if (error) return <p className="text-red-500 text-center py-20 font-medium">Error: {error.message}</p>;
     const authorProfile = data.userByName;
     console.log(authorProfile)
 
@@ -40,42 +41,49 @@ const AuthorProfile = () => {
     }
     return(
         <>
-            <div className="py-8 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-                    <div className="flex items-center space-x-4 mb-6">
-                        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold text-white">
-                            {authorProfile.name.charAt(0)}
+            <div className="py-12 px-4 sm:px-6 lg:px-8 font-sans">
+                <div className="max-w-4xl mx-auto p-8 bg-white shadow-md border border-gray-200 rounded-xl">
+                    <div className="flex items-center space-x-6 mb-10 pb-8 border-b border-gray-100">
+                        <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center border border-indigo-200 shadow-sm text-3xl font-bold text-indigo-700">
+                            {authorProfile.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800">{authorProfile.name}</h1>
-                            <p className="text-gray-500">Member since: {formatDate(authorProfile.created_at)}</p>
+                            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{authorProfile.name}</h1>
+                            <p className="text-gray-500 font-medium mt-1">Member since {formatDate(authorProfile.created_at)}</p>
                         </div>
                     </div>
 
                     <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <thead className="bg-gray-100 border-b border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Published Articles</h2>
+                        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                            <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left py-3 px-4 font-semibold text-gray-600">Title</th>
-                                <th className="text-left py-3 px-4 font-semibold text-gray-600">Date Published</th>
+                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">Title</th>
+                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">Date Published</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-gray-100">
                             {authorProfile.paginatedArticles.data.map((article, index) => (
-                                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition duration-150">
-                                    <td className="py-3 px-4 text-gray-800 font-medium">{article.title}</td>
-                                    <td className="py-3 px-4 text-gray-600">{formatDate(article.created_at)}</td>
+                                <tr key={index} className="hover:bg-gray-50 transition duration-150 group">
+                                    <td className="py-4 px-6">
+                                        <Link to={`/article/${article.id}`} className="text-indigo-600 font-medium group-hover:text-indigo-800 transition-colors">
+                                            {article.title}
+                                        </Link>
+                                    </td>
+                                    <td className="py-4 px-6 text-gray-500 text-sm font-medium">{formatDate(article.created_at)}</td>
                                 </tr>
                             ))}
                             </tbody>
                         </table>
                         {authorProfile?.paginatedArticles?.paginatorInfo?.hasMorePages && (
-                            <button
-                                className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                                onClick={handleLoadMore}
-                            >
-                                Load More
-                            </button>
+                            <div className="mt-8 flex justify-center">
+                                <button
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-8 rounded-lg shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={handleLoadMore}
+                                >
+                                    Load More Articles
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>

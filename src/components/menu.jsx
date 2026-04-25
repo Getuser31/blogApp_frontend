@@ -85,12 +85,12 @@ const Menu = () => {
                                     onChange={handleSearch}
                                     type="search"
                                     placeholder="Search..."
-                                    className="w-full md:w-auto bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+                                    className="w-full md:w-auto bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-gray-900"
                                 />
                                 {!searchResultIsHidden && (
                                     <div className="absolute left-0 mt-2 w-full bg-white rounded-xl shadow-2xl py-2 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
-                                        {loading && <div className="px-4 py-2">Loading...</div>}
-                                        {error && <div className="px-4 py-2">Error: {error.message}</div>}
+                                        {loading && <div className="px-4 py-2 text-gray-900">Loading...</div>}
+                                        {error && <div className="px-4 py-2 text-red-600">Error: {error.message}</div>}
                                         {data && data.searchArticles?.data?.length > 0 ? (
                                             data.searchArticles.data.map(article => (
                                                 <div key={article.id} className="px-4 py-2 hover:bg-gray-100">
@@ -118,7 +118,7 @@ const Menu = () => {
                                     <div className="relative" onBlur={handleBlur}>
                                         <button
                                             onClick={handleDropdownUser}
-                                            className="px-4 py-2 text-sm font-medium text-black bg-white rounded-md border-1 border-gray-200 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                            className="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-md border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                                         >
                                             Profile
                                         </button>
@@ -150,7 +150,7 @@ const Menu = () => {
                                     </div>
                                     <button
                                         onClick={handleLogout}
-                                        className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                        className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
                                     >
                                         Logout
                                     </button>
@@ -159,13 +159,13 @@ const Menu = () => {
                                 <>
                                     <Link
                                         to="/login"
-                                        className="px-4 py-2 text-sm font-medium text-white bg-[#A17141] rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                        className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
                                         Login
                                     </Link>
                                     <Link
                                         to="/registration"
-                                        className="px-4 py-2 text-sm font-medium text-white bg-[#A17141] rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                                        className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-md hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
                                         Register
                                     </Link>
@@ -173,7 +173,6 @@ const Menu = () => {
                             )}
                         </div>
                     </div>
-                    <hr className="w-full border-t border-gray-400 pb-4"/>
                 </nav>
             </header>
         </>

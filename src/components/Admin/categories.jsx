@@ -20,16 +20,16 @@ const Categories = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <div className="text-indigo-400 text-xl font-semibold animate-pulse">Loading categories...</div>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
+                <div className="text-indigo-600 text-xl font-medium animate-pulse">Loading categories...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <div className="bg-red-900/20 border border-red-500 text-red-400 px-6 py-4 rounded-lg">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
+                <div className="bg-red-50 border border-red-200 text-red-600 px-6 py-4 rounded-lg font-medium">
                     Error: {error.message}
                 </div>
             </div>
@@ -59,32 +59,36 @@ const Categories = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-900 text-gray-100 p-8 font-sans">
-            <div className="max-w-4xl mx-auto">
-                <header className="mb-10 border-b border-gray-800 pb-6">
-                    <h1 className="text-3xl font-bold text-indigo-400">Manage Categories</h1>
-                    <p className="text-gray-400 mt-2">View existing categories and add new ones to your blog.</p>
+        <div className="min-h-screen bg-gray-50 font-sans py-10 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-5xl mx-auto">
+                <header className="mb-10 text-center">
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Manage Categories</h1>
+                    <p className="mt-3 text-gray-500 font-medium">View existing categories and add new ones to your blog.</p>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* List Section */}
-                    <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                    <div className="lg:col-span-2 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-100 pb-3">
                             <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
                             Existing Categories
                         </h2>
                         
                         {categories.length === 0 ? (
-                            <p className="text-gray-500 italic">No categories found.</p>
+                            <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
+                                <p className="text-gray-500 font-medium">No categories found.</p>
+                            </div>
                         ) : (
-                            <ul className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <ul className="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                                 {categories.map((category) => (
                                     <li key={category.id} 
-                                        className="bg-gray-700/50 hover:bg-gray-700 px-4 py-3 rounded-lg transition-colors flex items-center justify-between group">
-                                        <span className="text-gray-200">{category.name}</span>
+                                        className="bg-white border border-gray-100 hover:border-indigo-100 hover:shadow-sm px-5 py-4 rounded-lg transition-all flex items-center justify-between group">
+                                        <span className="text-gray-800 font-bold">{category.name}</span>
                                          <button
                                              onClick={() => {handleDeleteCategory(category.id)}}
-                                             className="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">Delete</button>
+                                             className="text-gray-400 hover:text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1">
+                                             Delete
+                                         </button>
                                     </li>
                                 ))}
                             </ul>
@@ -92,15 +96,15 @@ const Categories = () => {
                     </div>
 
                     {/* Form Section */}
-                    <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700 h-fit">
-                        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                    <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 h-fit">
+                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-100 pb-3">
                             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                            Add New Category
+                            Add New
                         </h2>
                         
-                        <form onSubmit={handleCategorySubmit} className="space-y-4">
+                        <form onSubmit={handleCategorySubmit} className="space-y-5">
                             <div>
-                                <label htmlFor="categoryName" className="block text-sm font-medium text-gray-400 mb-1">
+                                <label htmlFor="categoryName" className="block text-sm font-bold text-gray-700 mb-2">
                                     Category Name
                                 </label>
                                 <input 
@@ -110,13 +114,13 @@ const Categories = () => {
                                     name="categoryName" 
                                     id="categoryName" 
                                     placeholder="e.g. Technology" 
-                                    className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm"
                                     required
                                 />
                             </div>
                             
                             {apiError && (
-                                <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded border border-red-800">
+                                <div className="text-red-600 text-sm font-medium bg-red-50 p-3 rounded-md border border-red-200">
                                     {apiError.message}
                                 </div>
                             )}
@@ -124,7 +128,7 @@ const Categories = () => {
                             <button 
                                 type="submit" 
                                 disabled={addLoading || !categoryName.trim()}
-                                className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                                 {addLoading ? (
                                     <>

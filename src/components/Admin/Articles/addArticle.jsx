@@ -51,6 +51,7 @@ const formats = [
     'color', 'background',
     'align',
     'link', 'image',
+    'resize-inline',
 ];
 
 const AddArticle = () => {
@@ -80,8 +81,8 @@ const AddArticle = () => {
             let hasPlaceholders = false;
 
             if (uploadedImages.length > 0) {
-                // Scan for [img-X] placeholders
-                const placeholderRegex = /\[img-(\d+)\]/g;
+                // Scan for src="[img-X]" placeholders
+                const placeholderRegex = /src="\[img-(\d+)\]"/g;
                 let match;
                 while ((match = placeholderRegex.exec(updatedContent)) !== null) {
                     const fullMatch = match[0];
@@ -90,8 +91,7 @@ const AddArticle = () => {
                     if (placeholderId < uploadedImages.length) {
                         const serverPath = uploadedImages[placeholderId]?.path;
                         if (serverPath) {
-                            const imgTag = `<img src="${serverPath}" alt="inline image" style="max-width:100%;height:auto;" />`;
-                            updatedContent = updatedContent.replace(fullMatch, imgTag);
+                            updatedContent = updatedContent.replace(fullMatch, `src="${serverPath}"`);
                             hasPlaceholders = true;
                         }
                     }
@@ -153,8 +153,9 @@ const AddArticle = () => {
             const fileIndex = blobToFileIndexRef.current[blobUrl];
             // Escape special regex characters in the URL
             const escapedUrl = blobUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const imgRegex = new RegExp(`<img[^>]*src="${escapedUrl}"[^>]*>`, 'g');
-            prepared = prepared.replace(imgRegex, `[img-${fileIndex}]`);
+            // Only replace the src attribute value, preserving all other img attributes (class, style, width, etc.)
+            const srcRegex = new RegExp(`src="${escapedUrl}"`, 'g');
+            prepared = prepared.replace(srcRegex, `src="[img-${fileIndex}]"`);
         });
         return prepared;
     };
@@ -198,19 +199,19 @@ const AddArticle = () => {
     }
 
     return (
-        <div className="py-8 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 font-sans">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <Link
                             to="/admin"
-                            className="text-indigo-300 hover:text-indigo-200 text-sm flex items-center gap-1 mb-2 transition-colors"
+                            className="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1 mb-2 transition-colors"
                         >
                             &larr; Back to Admin
                         </Link>
-                        <h1 className="text-3xl font-bold text-white">Create New Article</h1>
-                        <p className="text-gray-400 text-sm mt-1">Write your next story and share it with the world</p>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Create New Article</h1>
+                        <p className="text-gray-500 font-medium text-sm mt-1">Write your next story and share it with the world</p>
                     </div>
                 </div>
 
@@ -219,9 +220,9 @@ const AddArticle = () => {
                         {/* Main Editor — Left Column (spans 2/3) */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Title Card */}
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
-                                    Article Title <span className="text-red-400">*</span>
+                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                <label htmlFor="title" className="block text-sm font-bold text-gray-900 mb-2">
+                                    Article Title <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     id="title"
@@ -229,15 +230,15 @@ const AddArticle = () => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="Enter your article title..."
-                                    className="w-full rounded-lg border border-gray-700 bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent px-4 py-3 text-lg"
+                                    className="w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-3 text-lg transition-colors"
                                     required
                                 />
                             </div>
 
                             {/* Content Editor Card */}
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Content <span className="text-red-400">*</span>
+                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                <label className="block text-sm font-bold text-gray-900 mb-2">
+                                    Content <span className="text-red-500">*</span>
                                 </label>
                                 <ReactQuill
                                     ref={quillRef}
@@ -247,7 +248,7 @@ const AddArticle = () => {
                                     modules={modules}
                                     formats={formats}
                                     placeholder="Write your article here..."
-                                    className="bg-white text-black rounded-lg overflow-hidden [&_.ql-editor]:min-h-[500px] [&_.ql-toolbar]:border-gray-300"
+                                    className="bg-white text-gray-900 rounded-lg overflow-hidden [&_.ql-editor]:min-h-[500px] [&_.ql-toolbar]:border-gray-200 [&_.ql-container]:border-gray-200"
                                 />
                             </div>
                         </div>
@@ -255,15 +256,14 @@ const AddArticle = () => {
                         {/* Sidebar — Right Column (spans 1/3) */}
                         <div className="space-y-6">
                             {/* Publish Settings Card */}
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
                                     Publish Settings
                                 </h2>
-                                <div className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg border border-gray-700">
+                                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
                                     <div>
-                                        <p className="text-sm font-medium text-gray-200">Publish directly</p>
-                                        <p className="text-xs text-gray-400">Make this article visible to everyone</p>
+                                        <p className="text-sm font-bold text-gray-900">Publish directly</p>
+                                        <p className="text-xs font-medium text-gray-500">Make this article visible to everyone</p>
                                     </div>
                                     <label className="relative inline-flex items-center cursor-pointer">
                                         <input
@@ -273,15 +273,14 @@ const AddArticle = () => {
                                             onChange={(e) => setIsPublished(e.target.checked)}
                                             className="sr-only peer"
                                         />
-                                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                                     </label>
                                 </div>
                             </div>
 
                             {/* Categories Card */}
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
                                     Categories
                                 </h2>
                                 <CategoryDropdown
@@ -292,14 +291,13 @@ const AddArticle = () => {
                             </div>
 
                             {/* Images Card — Upload and insert into editor */}
-                            <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
                                     Images
                                 </h2>
-                                <p className="text-xs text-gray-400 mb-3">
+                                <p className="text-xs font-medium text-gray-500 mb-4 leading-relaxed">
                                     1. Upload images below<br />
-                                    2. Hover a thumbnail and click <strong>"Insert in text"</strong><br />
+                                    2. Hover a thumbnail and click <strong className="text-gray-700">"Insert in text"</strong><br />
                                     3. The image appears directly in the editor — you can resize it by dragging corners, or align it with the toolbar.
                                 </p>
                                 <ImageUpload
@@ -311,14 +309,14 @@ const AddArticle = () => {
 
                             {/* Validation Error */}
                             {validationError && (
-                                <div className="rounded-lg bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300">
+                                <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-600">
                                     {validationError}
                                 </div>
                             )}
 
                             {/* API Error */}
                             {error && (
-                                <div className="rounded-lg bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300">
+                                <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-600">
                                     {error.message}
                                 </div>
                             )}
@@ -327,7 +325,7 @@ const AddArticle = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-3 text-white font-semibold transition-colors shadow-lg"
+                                className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-3 text-white font-bold transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                                 {loading ? (
                                     <>

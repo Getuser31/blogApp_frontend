@@ -12,8 +12,8 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* About Section */}
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">About</h3>
-                        <p className="text-gray-600">
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">About</h3>
+                        <p className="text-gray-600 font-medium leading-relaxed">
                             A blog dedicated to sharing insights, stories, and ideas about technology, design, and
                             creativity.
                         </p>
@@ -21,24 +21,24 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Links</h3>
-                        <ul className="space-y-2">
-                            <li><Link to="/" className="text-gray-600 hover:text-gray-900">Home</Link></li>
-                            <li><a href="/categories" className="text-gray-600 hover:text-gray-900">Categories</a></li>
-                            <li><a href="/about" className="text-gray-600 hover:text-gray-900">About Us</a></li>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Quick Links</h3>
+                        <ul className="space-y-3">
+                            <li><Link to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Home</Link></li>
+                            <li><a href="/categories" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Categories</a></li>
+                            <li><a href="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">About Us</a></li>
                         </ul>
                     </div>
 
                     {/* Categories */}
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
-                        <ul className="space-y-2">
-                            {loading && <li>Loading categories...</li>}
-                            {error && <li>Error loading categories</li>}
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Categories</h3>
+                        <ul className="space-y-3">
+                            {loading && <li className="text-gray-500 font-medium animate-pulse">Loading categories...</li>}
+                            {error && <li className="text-red-500 font-medium">Error loading categories</li>}
                             {data?.getCategories?.map((category) => (
                                 <li key={category.id}>
                                     <Link to={`/category/${category.name}`}
-                                          className="text-gray-600 hover:text-gray-900">{category.name}
+                                          className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">{category.name}
                                     </Link>
                                 </li>
                             ))}
@@ -47,29 +47,29 @@ const Footer = () => {
 
                     {/* Newsletter */}
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Newsletter</h3>
-                        <p className="text-gray-600 mb-4">
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Newsletter</h3>
+                        <p className="text-gray-600 mb-4 font-medium leading-relaxed">
                             Subscribe to get the latest articles delivered to your inbox.
                         </p>
-                        <form className="flex">
+                        <form className="flex shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
                             <input
                                 type="email"
                                 placeholder="Your email"
-                                className="flex-1 px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                className="flex-1 px-4 py-2.5 bg-white text-gray-900 focus:outline-none font-medium"
                             />
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-gray-900 text-white rounded-r-lg hover:bg-gray-800"
+                                className="px-4 py-2.5 bg-indigo-600 text-white hover:bg-indigo-700 transition-colors flex items-center justify-center"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="42" fill="none"
-                                     viewBox="0 0 48 42">
-                                    <path fill="#101828"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 48 42" className="transform scale-75">
+                                    <path fill="currentColor"
                                           d="M0 8a8 8 0 0 1 8-8h32a8 8 0 0 1 8 8v26a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8z"/>
                                     <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round"
-                                          strokeWidth="1.333"
+                                          strokeWidth="2.5"
                                           d="m30.667 17.667-5.994 3.818a1.33 1.33 0 0 1-1.34 0l-6-3.818"/>
                                     <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round"
-                                          strokeWidth="1.333"
+                                          strokeWidth="2.5"
                                           d="M29.333 15.667H18.667c-.737 0-1.334.597-1.334 1.333v8c0 .736.597 1.333 1.334 1.333h10.666c.737 0 1.334-.597 1.334-1.333v-8c0-.736-.597-1.333-1.334-1.333"/>
                                 </svg>
                             </button>
@@ -79,9 +79,9 @@ const Footer = () => {
 
                 {/* Bottom Footer */}
                 <div
-                    className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
-                    <p className="text-gray-600 text-sm">
-                        © {new Date().getFullYear()} My Blog. All rights reserved.
+                    className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center">
+                    <p className="text-gray-500 text-sm font-medium">
+                        © {new Date().getFullYear()} Blog App. All rights reserved.
                     </p>
                 </div>
             </div>

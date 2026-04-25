@@ -39,24 +39,26 @@ const CommentForm = ({articleId}) => {
         }
     }
     return (
-        <form onSubmit={handleSubmit} className="mt-6">
-            <h2 className="text-xl font-semibold font-serif mb-4">Leave a Comment</h2>
+        <form onSubmit={handleSubmit} className="mt-8 bg-gray-50 p-6 rounded-lg border border-gray-100">
+            <h2 className="text-xl font-bold font-sans text-gray-900 mb-4">Leave a Comment</h2>
             <div>
                 <label htmlFor="comment" className="sr-only">Comment</label>
                 <textarea
                     id="comment"
                     rows="4"
-                    className="w-full px-3 py-2 border border-stone-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 focus:border-stone-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-white text-gray-900 resize-y"
                     placeholder="Write your comment here..."
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     required
                 />
             </div>
-            <button type="submit" disabled={loading} className="mt-4 px-6 py-2 bg-stone-800 text-white font-semibold rounded-lg shadow-md hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-400 focus:ring-opacity-75 disabled:bg-stone-400 disabled:cursor-not-allowed">
-                {loading ? 'Submitting...' : 'Submit Comment'}
-            </button>
-            {error && <p className="mt-2 text-red-600">Error: Could not submit your comment. Please try again.</p>}
+            <div className="mt-4 flex items-center justify-between">
+                <button type="submit" disabled={loading} className="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors">
+                    {loading ? 'Submitting...' : 'Post Comment'}
+                </button>
+            </div>
+            {error && <p className="mt-3 text-sm text-red-600 font-medium bg-red-50 p-3 rounded-md border border-red-100">Error: Could not submit your comment. Please try again.</p>}
         </form>
     )
 }

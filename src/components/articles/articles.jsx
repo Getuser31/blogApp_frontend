@@ -29,7 +29,7 @@ const Articles = ({ categoryId }) => {
         return (
             <div className="flex items-center justify-center py-20 font-sans">
                 <div className="text-center">
-                    <p className="text-white">Loading articles...</p>
+                    <p className="text-gray-600">Loading articles...</p>
                 </div>
             </div>
         );
@@ -49,6 +49,12 @@ const Articles = ({ categoryId }) => {
 
     const handleArticleClick = (id) => {
         navigate(`/article/${id}`);
+    };
+
+    const handleCategoryFilter = (event) => {
+        const categoryId = event.target.value;
+        setSelectedCategory(categoryId);
+        refetch({ page: 1, category_id: categoryId || undefined });
     };
 
     const handleLoadMore = () => {
@@ -74,34 +80,74 @@ const Articles = ({ categoryId }) => {
         }
     }
 
-    const handleCategoryFilter = (event) => {
-        const categoryId = event.target.value;
-        setSelectedCategory(categoryId);
-        refetch({ page: 1, category_id: categoryId || undefined });
-    };
-
     return (
         <div className="container mx-auto p-6">
             <div className="mb-6">
-                <h3 className="text-lg font-bold mb-2">Filter By Categories</h3>
-                <select
-                    onChange={handleCategoryFilter}
-                    value={selectedCategory}
-                    className="p-2 border rounded bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="">All Categories</option>
-                    {categoriesData?.getCategories?.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Filter By Categories</h3>
+
+                {/* Dropdown on mobile */}
+                <div className="md:hidden relative">
+                    <select
+                        onChange={handleCategoryFilter}
+                        value={selectedCategory}
+                        className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-2.5 pl-3 pr-10 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm leading-tight cursor-pointer"
+                    >
+                        <option value="">All Categories</option>
+                        {categoriesData?.getCategories?.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                {/* Pills on desktop */}
+                <div className="hidden md:block">
+                    {categoriesData?.getCategories?.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                onClick={() => {
+                                    setSelectedCategory("");
+                                    refetch({ page: 1, category_id: undefined });
+                                }}
+                                className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                                    selectedCategory === ""
+                                        ? "bg-indigo-600 text-white shadow-md"
+                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                }`}
+                            >
+                                All Categories
+                            </button>
+                            {categoriesData?.getCategories?.map((category) => (
+                                <button
+                                    key={category.id}
+                                    onClick={() => {
+                                        setSelectedCategory(category.id);
+                                        refetch({ page: 1, category_id: category.id });
+                                    }}
+                                    className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                                        selectedCategory === category.id
+                                            ? "bg-indigo-600 text-white shadow-md"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    }`}
+                                >
+                                    {category.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {sortedArticles.map((article) => (
                     <div
                         key={article.id}
-                        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100"
                         onClick={() => handleArticleClick(article.id)}
                     >
                         <img
@@ -110,21 +156,27 @@ const Articles = ({ categoryId }) => {
                             alt={article.title}
                         />
                         <div className="p-6">
-                            <h2 className="text-xl font-bold mb-2">{article.title}</h2>
-                            <p className="text-gray-700 text-sm">
+                            <h2 className="text-xl font-bold mb-2 text-gray-900">{article.title}</h2>
+                            <p className="text-gray-600 text-sm leading-relaxed">
                                 {stripHtml(article.content).substring(0, 150)}...
                             </p>
+                            <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+                                <span>{new Date(article.created_at).toLocaleDateString()}</span>
+                                <span className="text-indigo-600 font-medium">Read more &rarr;</span>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
             {data?.publishedArticles?.paginatorInfo?.hasMorePages && (
-                <button
-                    className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                    onClick={handleLoadMore}
-                >
-                    Load More
-                </button>
+                <div className="mt-10 flex justify-center">
+                    <button
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-8 rounded-lg shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={handleLoadMore}
+                    >
+                        Load More Articles
+                    </button>
+                </div>
             )}
         </div>
     );
