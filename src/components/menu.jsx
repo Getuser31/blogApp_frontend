@@ -89,17 +89,52 @@ const Menu = () => {
                                 />
                                 {!searchResultIsHidden && (
                                     <div className="absolute left-0 mt-2 w-full bg-white rounded-xl shadow-2xl py-2 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
-                                        {loading && <div className="px-4 py-2 text-gray-900">Loading...</div>}
-                                        {error && <div className="px-4 py-2 text-red-600">Error: {error.message}</div>}
-                                        {data && data.searchArticles?.data?.length > 0 ? (
-                                            data.searchArticles.data.map(article => (
-                                                <div key={article.id} className="px-4 py-2 hover:bg-gray-100">
-                                                    <Link to={`/article/${article.id}`} className="block text-sm text-gray-700">{article.title}</Link>
+                                        {loading && (
+                                            <div className="px-4 py-3 flex items-center gap-3">
+                                                <div className="animate-pulse flex items-center gap-3 w-full">
+                                                    <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+                                                    <div className="flex-1 space-y-2">
+                                                        <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                                                        <div className="h-2 bg-gray-100 rounded w-1/2"></div>
+                                                    </div>
                                                 </div>
-                                            ))
-                                        ) : (
-                                            <div className="px-4 py-2">
-                                                <p className="text-sm text-gray-500">No results found.</p>
+                                            </div>
+                                        )}
+                                        {error && <div className="px-4 py-3 text-red-600 text-sm">Error: {error.message}</div>}
+                                        {data && data.searchArticles?.data?.length > 0 ? (
+                                            <div>
+                                                <div className="px-4 py-2 border-b border-gray-100">
+                                                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Articles</span>
+                                                </div>
+                                                {data.searchArticles.data.map((article, index) => (
+                                                    <Link
+                                                        key={article.id}
+                                                        to={`/article/${article.id}`}
+                                                        className={`flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150 ${
+                                                            index !== data.searchArticles.data.length - 1 ? 'border-b border-gray-50' : ''
+                                                        }`}
+                                                    >
+                                                        <div className="shrink-0 w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                                            <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="text-sm font-medium text-gray-900 truncate">{article.title}</p>
+                                                            {article.created_at && (
+                                                                <p className="text-xs text-gray-400 mt-0.5">{new Date(article.created_at).toLocaleDateString()}</p>
+                                                            )}
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        ) : data && data.searchArticles?.data?.length === 0 && (
+                                            <div className="px-4 py-6 flex flex-col items-center text-center">
+                                                <svg className="w-8 h-8 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                                <p className="text-sm text-gray-500">No articles found</p>
+                                                <p className="text-xs text-gray-400 mt-1">Try a different search term</p>
                                             </div>
                                         )}
                                     </div>

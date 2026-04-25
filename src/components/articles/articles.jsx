@@ -147,7 +147,7 @@ const Articles = ({ categoryId }) => {
                 {sortedArticles.map((article) => (
                     <div
                         key={article.id}
-                        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100"
+                        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col h-full"
                         onClick={() => handleArticleClick(article.id)}
                     >
                         <img
@@ -155,9 +155,9 @@ const Articles = ({ categoryId }) => {
                             src={article.images[0]?.path || "https://placehold.co/400x300"}
                             alt={article.title}
                         />
-                        <div className="p-6">
+                        <div className="p-6 flex flex-col flex-1">
                             <h2 className="text-xl font-bold mb-2 text-gray-900">{article.title}</h2>
-                            <p className="text-gray-600 text-sm leading-relaxed">
+                            <p className="text-gray-600 text-sm leading-relaxed flex-1">
                                 {stripHtml(article.content).substring(0, 150)}...
                             </p>
                             <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
