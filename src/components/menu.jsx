@@ -4,8 +4,11 @@ import {useAuth} from "../AuthContext.jsx";
 import {FaUser, FaEdit, FaBars, FaTimes} from "react-icons/fa";
 import {useLazyQuery} from "@apollo/client/react";
 import {SEARCH_ARTICLES} from "../graphql/queries.js";
+import {useTranslation} from "react-i18next";
+import i18n from "i18next";
 
 const Menu = () => {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {user, logout} = useAuth();
     const [isHidden, setIsHidden] = useState(true);
@@ -13,6 +16,13 @@ const Menu = () => {
     const [searchArticles, {loading, error, data}] = useLazyQuery(SEARCH_ARTICLES);
     const [searchResultIsHidden, setSearchResultIsHidden] = useState(true)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+    const [currentLang, setCurrentLang] = useState(i18n.language?.split('-')[0] || 'en');
+
+    const languages = [
+        { code: 'en', flag: '🇬🇧', name: 'English' },
+        { code: 'fr', flag: '🇫🇷', name: 'Français' },
+    ];
 
     const handleLogout = async () => {
         logout();
@@ -54,6 +64,18 @@ const Menu = () => {
         }
     }
 
+    const handleLanguageChange = (lang) => {
+        localStorage.setItem('i18nextLng', lang);
+        i18n.changeLanguage(lang);
+        setCurrentLang(lang);
+        setLangDropdownOpen(false);
+    }
+
+    const handleLangBlur = (e) => {
+        if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
+        setLangDropdownOpen(false);
+    }
+
     return (
         <>
             <header className="bg-white shadow-sm">
@@ -77,7 +99,7 @@ const Menu = () => {
                                     value={search}
                                     onChange={handleSearch}
                                     type="search"
-                                    placeholder="Search..."
+                                    placeholder={t('menu.search')}
                                     className="w-full md:w-auto bg-white border border-gray-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-gray-900"
                                 />
                                 {!searchResultIsHidden && (
@@ -97,7 +119,7 @@ const Menu = () => {
                                         {data && data.searchArticles?.data?.length > 0 ? (
                                             <div>
                                                 <div className="px-4 py-2 border-b border-gray-100">
-                                                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Articles</span>
+                                                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">{t('menu.articles')}</span>
                                                 </div>
                                                 {data.searchArticles.data.map((article, index) => (
                                                     <Link
@@ -126,10 +148,32 @@ const Menu = () => {
                                                 <svg className="w-8 h-8 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                                 </svg>
-                                                <p className="text-sm text-gray-500">No articles found</p>
-                                                <p className="text-xs text-gray-400 mt-1">Try a different search term</p>
+                                                <p className="text-sm text-gray-500">{t('menu.searchNoResults')}</p>
+                                                <p className="text-xs text-gray-400 mt-1">{t('menu.searchNoResultsHint')}</p>
                                             </div>
                                         )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="relative" onBlur={handleLangBlur}>
+                                <button
+                                    onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                                    className="flex items-center px-2 py-1.5 text-xl rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                >
+                                    {languages.find(l => l.code === currentLang)?.flag ?? '🌐'}
+                                </button>
+                                {langDropdownOpen && (
+                                    <div className="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-2xl py-1 ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+                                        {languages.map(lang => (
+                                            <button
+                                                key={lang.code}
+                                                onClick={() => handleLanguageChange(lang.code)}
+                                                className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150 ${currentLang === lang.code ? 'bg-indigo-50 text-indigo-600 font-medium' : ''}`}
+                                            >
+                                                <span className="text-base">{lang.flag}</span>
+                                                <span>{lang.name}</span>
+                                            </button>
+                                        ))}
                                     </div>
                                 )}
                             </div>
@@ -140,7 +184,7 @@ const Menu = () => {
                                             to="/admin"
                                             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         >
-                                            Admin
+                                            {t('menu.admin')}
                                         </Link>
                                     )}
                                     <div className="relative" onBlur={handleBlur}>
@@ -148,7 +192,7 @@ const Menu = () => {
                                             onClick={handleDropdownUser}
                                             className="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-md border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                                         >
-                                            Profile
+                                            {t('menu.profile')}
                                         </button>
                                         {!isHidden && (
                                             <div
@@ -162,14 +206,14 @@ const Menu = () => {
                                                     </li>
                                                     <li>
                                                         <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
-                                                            <Link to="/userArticles"><span className="font-medium">Your articles</span></Link>
+                                                            <Link to="/userArticles"><span className="font-medium">{t('menu.yourArticles')}</span></Link>
                                                         </div>
                                                     </li>
                                                     <div className="my-1 border-t border-gray-100"></div>
                                                     <li>
                                                         <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
                                                             <FaEdit className="text-lg text-gray-400 group-hover:text-indigo-600" />
-                                                            <Link to={'/addArticle'}> <span className="font-medium">Write Now </span> </Link>
+                                                            <Link to={'/addArticle'}> <span className="font-medium">{t('menu.writeNow')}</span> </Link>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -180,7 +224,7 @@ const Menu = () => {
                                         onClick={handleLogout}
                                         className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
                                     >
-                                        Logout
+                                        {t('menu.logout')}
                                     </button>
                                 </>
                             ) : (
@@ -189,13 +233,13 @@ const Menu = () => {
                                         to="/login"
                                         className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
-                                        Login
+                                        {t('menu.login')}
                                     </Link>
                                     <Link
                                         to="/registration"
                                         className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-md hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
-                                        Register
+                                        {t('menu.register')}
                                     </Link>
                                 </>
                             )}

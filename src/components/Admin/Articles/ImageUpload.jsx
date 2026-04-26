@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {useTranslation} from "react-i18next";
 
 const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImage }) => {
+    const {t} = useTranslation();
     const [images, setImages] = useState([]);
     const [previews, setPreviews] = useState([]);
     const previewUrlsRef = useRef([]);
@@ -48,7 +50,7 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
     return (
         <div>
             <label htmlFor="images" className="block mb-2 text-sm font-medium text-gray-700">
-                Images
+                {t('imageUpload.images')}
             </label>
             <input
                 id="images"
@@ -71,10 +73,10 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
                             type="button"
                             onClick={() => handleInsertClick(preview, index)}
                             className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg cursor-pointer backdrop-blur-sm"
-                            title="Click to insert this image into the editor at cursor position"
+                            title={t('imageUpload.insertInText')}
                         >
                             <span className="text-white text-xs font-semibold bg-indigo-600 px-3 py-1.5 rounded-full shadow-sm">
-                                Insert in text
+                                {t('imageUpload.insertInText')}
                             </span>
                         </button>
                     </div>
@@ -82,7 +84,7 @@ const ImageUpload = ({ onUpload, name = "images", required = false, onInsertImag
             </div>
             {previews.length > 0 && (
                 <p className="text-xs text-gray-500 mt-3 font-medium">
-                    Hover an image and click <strong className="text-gray-700">"Insert in text"</strong> to place it at your cursor position in the editor
+                    {t('imageUpload.insertHint')}
                 </p>
             )}
         </div>

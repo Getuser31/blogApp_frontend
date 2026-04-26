@@ -2,8 +2,10 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useMutation} from "@apollo/client/react";
 import {ADD_USER} from "../../graphql/mutations.js";
+import {useTranslation} from "react-i18next";
 
 const Registration = () => {
+    const {t} = useTranslation();
     const [user, setUser] = useState({
         username: '',
         email: '',
@@ -34,12 +36,12 @@ const Registration = () => {
         setValidationError('');
 
         if(user.username === '' || user.email === '' || user.password === '' || user.repeatPassword === ''){
-            setValidationError("All fields are required");
+            setValidationError(t('registration.allFieldsRequired'));
             return;
         }
 
         if (user.password !== user.repeatPassword) {
-            setValidationError("Passwords do not match");
+            setValidationError(t('registration.passwordsDoNotMatch'));
             return;
         }
 
@@ -61,7 +63,7 @@ const Registration = () => {
     return (
         <div className="flex items-center justify-center py-12">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Registration Page</h1>
+                <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">{t('registration.title')}</h1>
 
                 {validationError && (
                     <div className="mb-4 p-3 bg-red-100 text-red-700 rounded border border-red-200">
@@ -79,7 +81,7 @@ const Registration = () => {
                     onSubmit={handleSubmit}
                 >
                     <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">{t('registration.username')}</label>
                         <input
                             type="text"
                             id="username"
@@ -91,7 +93,7 @@ const Registration = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">{t('registration.email')}</label>
                         <input
                             type="email"
                             id="email"
@@ -103,7 +105,7 @@ const Registration = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">{t('registration.password')}</label>
                         <input
                             type="password"
                             id="password"
@@ -115,7 +117,7 @@ const Registration = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="repeatPassword" className="block text-sm font-medium text-gray-700">Repeat password:</label>
+                        <label htmlFor="repeatPassword" className="block text-sm font-medium text-gray-700">{t('registration.repeatPassword')}</label>
                         <input
                             type="password"
                             id="repeatPassword"
@@ -131,7 +133,7 @@ const Registration = () => {
                         disabled={loading}
                         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors"
                     >
-                        {loading ? 'Registering...' : 'Register'}
+                        {loading ? t('registration.registering') : t('registration.register')}
                     </button>
                 </form>
             </div>

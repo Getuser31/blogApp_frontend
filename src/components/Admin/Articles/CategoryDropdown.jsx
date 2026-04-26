@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import {useTranslation} from "react-i18next";
 
 const CategoryDropdown = ({ categories, selectedCategories, onCategoryChange }) => {
+    const {t} = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -30,13 +32,13 @@ const CategoryDropdown = ({ categories, selectedCategories, onCategoryChange }) 
 
     return (
         <div className="relative" ref={dropdownRef}>
-            <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">Category</label>
+            <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">{t('categoryDropdown.category')}</label>
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 px-4 py-2.5 text-left"
             >
-                {selectedCategoryNames || 'Select categories'}
+                {selectedCategoryNames || t('categoryDropdown.selectCategories')}
             </button>
 
             {isOpen && (

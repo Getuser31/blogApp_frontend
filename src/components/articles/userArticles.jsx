@@ -3,6 +3,7 @@ import {useMutation, useQuery} from "@apollo/client/react";
 import {USER_ARTICLES} from "../../graphql/queries.js";
 import {TOOGLE_PUBLISH_STATUS} from "../../graphql/mutations.js";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -17,12 +18,13 @@ const formatDate = (timestamp) => {
     }).replace(',', '');
 };
 
-const userArticles = () => {
+const UserArticles = () => {
+    const {t} = useTranslation();
     const {loading, error, data} = useQuery(USER_ARTICLES)
 
     const [mutateAsync, {loading: mutateLoading, error: mutateError}] = useMutation(TOOGLE_PUBLISH_STATUS)
 
-    if (loading) return <p className="text-center mt-4 text-gray-600 font-medium">Loading...</p>
+    if (loading) return <p className="text-center mt-4 text-gray-600 font-medium">{t('userArticles.loading')}</p>
     if (error) return <p className="text-center mt-4 text-red-500 font-medium">Error: {error.message}</p>
 
     const handlePublish = async (articleId, publish) => {
@@ -37,19 +39,19 @@ const userArticles = () => {
     return (
         <div className="font-sans py-8 px-4 sm:px-6 lg:px-8">
             <div className="container mx-auto max-w-5xl">
-                <h1 className="text-3xl font-extrabold mb-8 text-gray-900 tracking-tight">Your Articles</h1>
+                <h1 className="text-3xl font-extrabold mb-8 text-gray-900 tracking-tight">{t('userArticles.title')}</h1>
                 <div className="overflow-x-auto bg-white shadow-md border border-gray-200 rounded-xl">
                     <table className="min-w-full leading-normal">
                         <thead>
                         <tr>
                             <th className="px-6 py-4 border-b border-gray-200 bg-gray-50 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                                Title
+                                {t('userArticles.title')}
                             </th>
                             <th className="px-6 py-4 border-b border-gray-200 bg-gray-50 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                                Date Published
+                                {t('userArticles.datePublished')}
                             </th>
                             <th className="px-6 py-4 border-b border-gray-200 bg-gray-50 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                                Status
+                                {t('userArticles.status')}
                             </th>
                         </tr>
                         </thead>
@@ -75,7 +77,7 @@ const userArticles = () => {
                                             />
                                         </button>
                                         <span className={`text-sm font-medium ${article.published ? 'text-green-600' : 'text-gray-500'}`}>
-                                            {article.published ? 'Published' : 'Draft'}
+                                            {article.published ? t('userArticles.published') : t('userArticles.draft')}
                                         </span>
                                     </div>
                                 </td>
@@ -85,8 +87,8 @@ const userArticles = () => {
                     </table>
                     {data.userArticles.articles.length === 0 && (
                         <div className="text-center py-12">
-                            <p className="text-gray-500 font-medium text-lg">You haven't written any articles yet.</p>
-                            <Link to="/addArticle" className="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">Write your first article &rarr;</Link>
+                            <p className="text-gray-500 font-medium text-lg">{t('userArticles.noArticles')}</p>
+                            <Link to="/addArticle" className="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">{t('userArticles.writeFirstArticle')} &rarr;</Link>
                         </div>
                     )}
                 </div>
@@ -95,4 +97,4 @@ const userArticles = () => {
     )
 }
 
-export default userArticles;
+export default UserArticles;

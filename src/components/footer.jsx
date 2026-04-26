@@ -3,8 +3,10 @@ import {FaFacebook, FaTwitter, FaInstagram, FaLinkedin} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {useQuery} from "@apollo/client/react";
 import {GET_CATEGORIES} from "../graphql/queries.js";
+import {useTranslation} from "react-i18next";
 
 const Footer = () => {
+    const {t} = useTranslation();
     const {loading, error, data} = useQuery(GET_CATEGORIES);
     return (
         <footer className="bg-white border-t border-gray-200">
@@ -12,29 +14,28 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* About Section */}
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">About</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">{t('footer.about')}</h3>
                         <p className="text-gray-600 font-medium leading-relaxed">
-                            A blog dedicated to sharing insights, stories, and ideas about technology, design, and
-                            creativity.
+                            {t('footer.aboutText')}
                         </p>
                     </div>
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Quick Links</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">{t('footer.quickLinks')}</h3>
                         <ul className="space-y-3">
-                            <li><Link to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Home</Link></li>
-                            <li><a href="/categories" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Categories</a></li>
-                            <li><a href="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">About Us</a></li>
+                            <li><Link to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">{t('footer.home')}</Link></li>
+                            <li><a href="/categories" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">{t('footer.categories')}</a></li>
+                            <li><a href="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">{t('footer.aboutUs')}</a></li>
                         </ul>
                     </div>
 
                     {/* Categories */}
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Categories</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">{t('footer.categories')}</h3>
                         <ul className="space-y-3">
-                            {loading && <li className="text-gray-500 font-medium animate-pulse">Loading categories...</li>}
-                            {error && <li className="text-red-500 font-medium">Error loading categories</li>}
+                            {loading && <li className="text-gray-500 font-medium animate-pulse">{t('footer.loadingCategories')}</li>}
+                            {error && <li className="text-red-500 font-medium">{t('footer.errorLoadingCategories')}</li>}
                             {data?.getCategories?.map((category) => (
                                 <li key={category.id}>
                                     <Link to={`/category/${category.name}`}
@@ -47,14 +48,14 @@ const Footer = () => {
 
                     {/* Newsletter */}
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Newsletter</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">{t('footer.newsletter')}</h3>
                         <p className="text-gray-600 mb-4 font-medium leading-relaxed">
-                            Subscribe to get the latest articles delivered to your inbox.
+                            {t('footer.newsletterText')}
                         </p>
                         <form className="flex shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
                             <input
                                 type="email"
-                                placeholder="Your email"
+                                placeholder={t('footer.yourEmail')}
                                 className="flex-1 px-4 py-2.5 bg-white text-gray-900 focus:outline-none font-medium"
                             />
                             <button
@@ -81,7 +82,7 @@ const Footer = () => {
                 <div
                     className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-gray-500 text-sm font-medium">
-                        © {new Date().getFullYear()} Blog App. All rights reserved.
+                        © {new Date().getFullYear()} {t('footer.allRightsReserved')}
                     </p>
                 </div>
             </div>

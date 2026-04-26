@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client/react";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../graphql/queries.js";
 import { useNavigate } from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const stripHtml = (html) => {
     if (!html) return "";
@@ -10,6 +11,7 @@ const stripHtml = (html) => {
 };
 
 const Articles = ({ categoryId }) => {
+    const {t} = useTranslation();
     const [selectedCategory, setSelectedCategory] = useState(categoryId || "");
     const { loading, error, data, fetchMore, refetch } = useQuery(GET_ARTICLES, {
         variables: { page: 1, category_id: selectedCategory || undefined },
@@ -29,7 +31,7 @@ const Articles = ({ categoryId }) => {
         return (
             <div className="flex items-center justify-center py-20 font-sans">
                 <div className="text-center">
-                    <p className="text-gray-600">Loading articles...</p>
+                    <p className="text-gray-600">{t('articles.loading')}</p>
                 </div>
             </div>
         );
@@ -38,7 +40,7 @@ const Articles = ({ categoryId }) => {
     if (error) {
         return (
             <div className="flex items-center justify-center py-20 text-red-500 font-sans">
-                <p>Error loading articles: {error.message}</p>
+                <p>{t('articles.errorLoading')}: {error.message}</p>
             </div>
         );
     }
@@ -83,7 +85,7 @@ const Articles = ({ categoryId }) => {
     return (
         <div className="container mx-auto p-6">
             <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">Filter By Categories</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">{t('articles.filterByCategories')}</h3>
 
                 {/* Dropdown on mobile */}
                 <div className="md:hidden relative">
@@ -92,7 +94,7 @@ const Articles = ({ categoryId }) => {
                         value={selectedCategory}
                         className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-2.5 pl-3 pr-10 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm leading-tight cursor-pointer"
                     >
-                        <option value="">All Categories</option>
+                        <option value="">{t('articles.allCategories')}</option>
                         {categoriesData?.getCategories?.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
@@ -121,7 +123,7 @@ const Articles = ({ categoryId }) => {
                                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                 }`}
                             >
-                                All Categories
+                                {t('articles.allCategories')}
                             </button>
                             {categoriesData?.getCategories?.map((category) => (
                                 <button
@@ -162,7 +164,7 @@ const Articles = ({ categoryId }) => {
                             </p>
                             <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
                                 <span>{new Date(article.created_at).toLocaleDateString()}</span>
-                                <span className="text-indigo-600 font-medium">Read more &rarr;</span>
+                                <span className="text-indigo-600 font-medium">{t('articles.readMore')}</span>
                             </div>
                         </div>
                     </div>
@@ -174,7 +176,7 @@ const Articles = ({ categoryId }) => {
                         className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-8 rounded-lg shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         onClick={handleLoadMore}
                     >
-                        Load More Articles
+                        {t('articles.loadMore')}
                     </button>
                 </div>
             )}

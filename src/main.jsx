@@ -6,6 +6,7 @@ import client from "./api/apolloClient.js";
 import router from "./router.jsx";
 import './index.css'
 import {AuthProvider} from "./AuthContext.jsx";
+import './i18n/i18n.js';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

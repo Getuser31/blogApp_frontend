@@ -4,11 +4,13 @@ import {useMutation, useQuery} from "@apollo/client/react";
 import {UPDATE_USER_STATUS} from "../../../graphql/mutations.js";
 import { FaPen } from "react-icons/fa";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const UsersList = () => {
+    const {t} = useTranslation();
     const {loading, error, data} = useQuery(GET_USERS);
     const [userStatus, {loading: statusLoading, error: statusError}] = useMutation(UPDATE_USER_STATUS)
-    if (loading) return <div className="flex justify-center items-center h-64"><p className="text-gray-600 font-medium">Loading users...</p></div>
+    if (loading) return <div className="flex justify-center items-center h-64"><p className="text-gray-600 font-medium">{t('usersList.loading')}</p></div>
     if (error) return <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-md m-4 font-medium">Error: {error.message}</div>
 
     const handleUserStatus = async (id) => {
@@ -24,7 +26,7 @@ const UsersList = () => {
         <div className="bg-gray-50 min-h-screen font-sans py-10 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Users Management</h1>
+                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{t('usersList.title')}</h1>
                 </div>
                 <div className="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
                     <div className="overflow-x-auto">
@@ -32,11 +34,11 @@ const UsersList = () => {
                             <thead className="bg-gray-50">
                             <tr>
                                 <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Email</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t('usersList.name')}</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t('usersList.email')}</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t('usersList.role')}</th>
+                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t('usersList.status')}</th>
+                                <th scope="col" className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">{t('usersList.actions')}</th>
                             </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-100">
@@ -63,15 +65,15 @@ const UsersList = () => {
                                         <button 
                                             onClick={() => handleUserStatus(user.id)} 
                                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${user.is_enabled ? 'bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500' : 'bg-red-100 text-red-800 hover:bg-red-200 focus:ring-red-500'}`}
-                                            title={user.is_enabled ? "Click to disable" : "Click to enable"}
+                                            title={user.is_enabled ? t('usersList.clickToDisable') : t('usersList.clickToEnable')}
                                         >
-                                            {user.is_enabled ? 'Active' : 'Inactive'}
+                                            {user.is_enabled ? t('usersList.active') : t('usersList.inactive')}
                                         </button>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <Link to={`/admin/user/${user.id}`} className="inline-flex items-center justify-center text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg transition-colors">
                                             <FaPen className="w-4 h-4" />
-                                            <span className="sr-only">Edit</span>
+                                            <span className="sr-only">{t('usersList.edit')}</span>
                                         </Link>
                                     </td>
                                 </tr>
@@ -80,7 +82,7 @@ const UsersList = () => {
                         </table>
                         {(!data || !data.users || data.users.length === 0) && (
                             <div className="text-center py-12">
-                                <p className="text-gray-500 font-medium text-lg">No users found.</p>
+                                <p className="text-gray-500 font-medium text-lg">{t('usersList.noUsers')}</p>
                             </div>
                         )}
                     </div>
