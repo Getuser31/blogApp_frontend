@@ -348,9 +348,11 @@ Test configuration is in `src/test/setup.js`. It includes:
 
 - Vitest configuration with jsdom environment
 - Mock for Apollo Client to simulate GraphQL queries/mutations
-- Mock for `react-i18next` to avoid translation loading in tests
+- Mock for `react-i18next` to provide a `t(key) => key` function, avoiding the need to initialize a full i18n instance in every test
 - Mock for React Router's `useParams`, `useNavigate`, etc.
 - Cleanup after each test
+
+> **Note:** The `t()` mock returns the translation key (e.g., `"error.title"`) rather than the translated value. For testing actual translations and language switching, see the dedicated `i18n.test.jsx` file which uses an isolated i18n instance.
 
 ---
 
