@@ -38,7 +38,9 @@ const Article = () => {
 
     useEffect(() => {
         if (data && data.article) {
-            saveLastReadArticle({variables: {articleId: data.article.id}})
+            if(user) {
+                saveLastReadArticle({variables: {articleId: data.article.id}})
+            }
         }
     }, [data?.article?.id]);
 
@@ -108,10 +110,12 @@ const Article = () => {
                     <div className="mb-2"><Link className="text-indigo-600 hover:text-indigo-800 transition-colors" to={`/author/${article.author.name}`}>By {article.author.name}</Link></div>
                     <div className="flex justify-between items-center text-sm text-gray-500">
                         <span>Published on {formattedDate}</span>
-                        <span onClick={handleFavorite}
-                              className={`text-3xl cursor-pointer transition-colors ${article.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-gray-300 hover:text-gray-400"}`}>
+                        {user && (
+                            <span onClick={handleFavorite}
+                                  className={`text-3xl cursor-pointer transition-colors ${article.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-gray-300 hover:text-gray-400"}`}>
                             {article.isFavorite ? "★" : "☆"}
                         </span>
+                        )}
                     </div>
                 </div>
 
