@@ -127,10 +127,11 @@ All test files are located in `src/test/`:
 | `Login.test.jsx` | Login form rendering, input updates, and error display |
 | `Registration.test.jsx` | Registration form rendering, password validation, and mutation calls |
 | `Comments.test.jsx` | Comment display (`CommentsOnArticle`) and form submission (`CommentForm`) |
-| `Articles.test.jsx` | Article list rendering, loading/error states, pagination, and navigation |
+| `Articles.test.jsx` | Article list rendering, loading/error states, pagination, navigation, and category filtering (dropdown + pills) |
 | `FavoriteArticles.test.jsx` | Favorites list, loading/error/empty states, and article linking |
 | `CategoryDropdown.test.jsx` | Multi-select dropdown with category selection/deselection |
 | `ImageUpload.test.jsx` | File upload, image previews, and insert-into-editor functionality |
+| `Article.test.jsx` | Individual article view — loading/error/not-found states, favorite toggling, author edit button, conditional last-read tracking |
 | `Admin.test.jsx` | Admin dashboard navigation to sub-pages |
 | `GraphQL.test.js` | Validity of all GraphQL query and mutation definitions (schema contract tests) |
 
