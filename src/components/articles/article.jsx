@@ -5,8 +5,10 @@ import {useParams, Link, useNavigate} from "react-router-dom";
 import CommentsOnArticle from "../comments/commentsOnArticle.jsx";
 import {useAuth} from "../../AuthContext.jsx";
 import {ADD_LAST_READ_ARTICLE, TOGGLE_ARTICLE_FAVORITE} from "../../graphql/mutations.js";
+import {useTranslation} from "react-i18next";
 
 const Article = () => {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const {id} = useParams();
     const {user} = useAuth();
@@ -47,7 +49,7 @@ const Article = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <p className="text-gray-900 text-2xl font-serif">Loading article...</p>
+                <p className="text-gray-900 text-2xl font-serif">{t('article.loading')}</p>
             </div>
         );
     }
@@ -66,8 +68,8 @@ const Article = () => {
         return (
             <div className="flex items-center justify-center py-20">
                 <div className="text-center text-gray-900 font-serif">
-                    <p className="text-2xl">Article not found.</p>
-                    <Link to="/" className="text-indigo-600 hover:underline mt-4 inline-block">&larr; Back to Home</Link>
+                    <p className="text-2xl">{t('article.notFound')}</p>
+                    <Link to="/" className="text-indigo-600 hover:underline mt-4 inline-block">{t('article.backToHome')}</Link>
                 </div>
             </div>
         )
@@ -107,9 +109,9 @@ const Article = () => {
                 </div>
 
                 <div className="text-gray-600 text-base font-medium font-sans capitalize mb-8 border-b border-gray-100 pb-6">
-                    <div className="mb-2"><Link className="text-indigo-600 hover:text-indigo-800 transition-colors" to={`/author/${article.author.name}`}>By {article.author.name}</Link></div>
+                    <div className="mb-2"><Link className="text-indigo-600 hover:text-indigo-800 transition-colors" to={`/author/${article.author.name}`}>{t('article.by')} {article.author.name}</Link></div>
                     <div className="flex justify-between items-center text-sm text-gray-500">
-                        <span>Published on {formattedDate}</span>
+                        <span>{t('article.publishedOn')} {formattedDate}</span>
                         {user && (
                             <span onClick={handleFavorite}
                                   className={`text-3xl cursor-pointer transition-colors ${article.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-gray-300 hover:text-gray-400"}`}>
@@ -129,7 +131,7 @@ const Article = () => {
                         <button
                             onClick={redirectToEdit}
                             className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-md shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Edit Article
+                            {t('article.editArticle')}
                         </button>
                     </div>
                 )}

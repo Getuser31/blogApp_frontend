@@ -3,22 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client/react';
 import { LOGIN_MUTATION } from "../../graphql/mutations";
 import {useAuth} from "../../AuthContext.jsx";
+import {useTranslation} from "react-i18next";
 
 const Login = () => {
+    const {t} = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const {login: authLogin} = useAuth()
 
-    // The useMutation hook returns a function to trigger the mutation and an object with loading/error states.
     const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
         onCompleted: (data) => {
-            // Pass the entire login payload to the auth context
-            // authLogin handles setting the token in localStorage
             authLogin(data.login);
             navigate('/');
         },
-        // This helps in debugging and can be used to show user-friendly errors.
         onError: (error) => {
             console.error("Login mutation failed:", error);
         }
@@ -26,7 +24,6 @@ const Login = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        // Call the mutation function with the required variables.
         login({ variables: { email, password } });
     };
 
@@ -34,15 +31,14 @@ const Login = () => {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 font-sans">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                    <h1 className="text-3xl font-extrabold text-gray-900 text-center tracking-tight">Welcome back</h1>
-                    <p className="text-gray-500 text-center mt-2 font-medium">Log in to access your account</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 text-center tracking-tight">{t('login.title')}</h1>
+                    <p className="text-gray-500 text-center mt-2 font-medium">{t('login.subtitle')}</p>
 
-                    {/* Use the form's onSubmit event */}
                     <form onSubmit={handleLogin} className="mt-8 space-y-6">
                         <div className="space-y-4">
                             <div>
                                 <label htmlFor="email" className="block text-sm font-bold text-gray-700">
-                                    Email
+                                    {t('login.email')}
                                 </label>
                                 <input
                                     id="email"
@@ -51,7 +47,7 @@ const Login = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="mt-1 block w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2.5 transition-colors"
-                                    placeholder="you@example.com"
+                                    placeholder={t('login.emailPlaceholder')}
                                     autoComplete="email"
                                     required
                                 />
@@ -59,7 +55,7 @@ const Login = () => {
 
                             <div>
                                 <label htmlFor="password" className="block text-sm font-bold text-gray-700">
-                                    Password
+                                    {t('login.password')}
                                 </label>
                                 <input
                                     id="password"
@@ -68,7 +64,7 @@ const Login = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="mt-1 block w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2.5 transition-colors"
-                                    placeholder="••••••••"
+                                    placeholder={t('login.passwordPlaceholder')}
                                     autoComplete="current-password"
                                     required
                                 />
@@ -86,12 +82,12 @@ const Login = () => {
                             disabled={loading}
                             className="w-full inline-flex justify-center items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed px-4 py-3 text-white font-bold transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            {loading ? 'Logging in…' : 'Log In'}
+                            {loading ? t('login.loggingIn') : t('login.logIn')}
                         </button>
                     </form>
                 </div>
                 <p className="text-gray-500 text-center text-xs mt-6 font-medium">
-                    Protected area • Please authenticate to continue
+                    {t('login.protectedArea')}
                 </p>
             </div>
         </div>

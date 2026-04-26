@@ -4,6 +4,7 @@ import {USER_DATA} from "../../graphql/queries.js";
 import {useAuth} from "../../AuthContext.jsx";
 import {Link} from "react-router-dom";
 import {UPDATE_EMAIL, UPDATE_PASSWORD} from "../../graphql/mutations.js";
+import {useTranslation} from "react-i18next";
 
 const Card = ({title, children}) => (
     <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 min-h-[474px] flex flex-col">
@@ -13,6 +14,7 @@ const Card = ({title, children}) => (
 );
 
 const UserProfile = () => {
+    const {t} = useTranslation();
     const {user, loading: authLoading} = useAuth();
     const [isPasswordFormHidden, setIsPasswordFormHidden] = React.useState(true);
     const [isEmailFormHidden, setIsEmailFormHidden] = React.useState(true);
@@ -40,7 +42,7 @@ const UserProfile = () => {
     const lastReadArticles = userData?.lastReadArticles;
 
     if (loading || authLoading || !userData) {
-        return <div className="p-8 font-sans text-gray-900 text-center font-medium">Loading...</div>;
+        return <div className="p-8 font-sans text-gray-900 text-center font-medium">{t('userProfile.loading')}</div>;
     }
 
     if (error) {
@@ -53,7 +55,6 @@ const UserProfile = () => {
             ...prev,
             [name]: value
         }));
-        // Clear error for this field when user types
         if (formErrors[name]) {
             setFormErrors(prev => {
                 const newErrors = {...prev};
@@ -77,7 +78,6 @@ const UserProfile = () => {
             ...prev,
             [name]: value
         }));
-        // Clear error for this field when user types
         if (formErrors[name]) {
             setFormErrors(prev => {
                 const newErrors = {...prev};
@@ -97,11 +97,11 @@ const UserProfile = () => {
 
     const validatePasswordForm = () => {
         const errors = {};
-        if (!userPasswordForm.oldPassword) errors.oldPassword = "Current password is required";
-        if (!userPasswordForm.password) errors.password = "New password is required";
-        if (!userPasswordForm.passwordRepeat) errors.passwordRepeat = "Confirm password is required";
+        if (!userPasswordForm.oldPassword) errors.oldPassword = t('userProfile.currentPasswordRequired');
+        if (!userPasswordForm.password) errors.password = t('userProfile.newPasswordRequired');
+        if (!userPasswordForm.passwordRepeat) errors.passwordRepeat = t('userProfile.confirmPasswordRequired');
         if (userPasswordForm.password && userPasswordForm.passwordRepeat && userPasswordForm.password !== userPasswordForm.passwordRepeat) {
-            errors.passwordRepeat = "Passwords do not match";
+            errors.passwordRepeat = t('userProfile.passwordsDoNotMatch');
         }
         return errors;
     };
@@ -109,9 +109,9 @@ const UserProfile = () => {
     const validateEmailForm = () => {
         const errors = {};
         if (!userEmailForm.email) {
-            errors.email = "Email is required";
+            errors.email = t('userProfile.emailRequired');
         } else if (!/\S+@\S+\.\S+/.test(userEmailForm.email)) {
-            errors.email = "Email is invalid";
+            errors.email = t('userProfile.emailInvalid');
         }
         return errors;
     };
@@ -132,7 +132,7 @@ const UserProfile = () => {
                     passwordRepeat: userPasswordForm.passwordRepeat
                 }
             });
-            setSuccessMessage("Password updated successfully!");
+            setSuccessMessage(t('userProfile.passwordUpdated'));
             setUserPasswordForm({oldPassword: '', password: '', passwordRepeat: ''});
             setFormErrors({});
             setTimeout(() => {
@@ -159,7 +159,7 @@ const UserProfile = () => {
                     email: userEmailForm.email
                 }
             })
-            setSuccessMessage("Email updated successfully!");
+            setSuccessMessage(t('userProfile.emailUpdated'));
             setUserEmailForm({email: ''});
             setFormErrors({});
             setTimeout(() => {
@@ -178,10 +178,10 @@ const UserProfile = () => {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 {/* Profile Card */}
-                <Card title="Profile">
+                <Card title={t('userProfile.profile')}>
                     <div className="text-lg mb-8 flex-grow text-gray-700">
-                        <p className="mb-4"><span className="font-bold text-gray-900">Username:</span> {userData.name}</p>
-                        <p><span className="font-bold text-gray-900">Email:</span> {userData.email}</p>
+                        <p className="mb-4"><span className="font-bold text-gray-900">{t('userProfile.username')}</span> {userData.name}</p>
+                        <p><span className="font-bold text-gray-900">{t('userProfile.email')}</span> {userData.email}</p>
                     </div>
 
                     <form hidden={isPasswordFormHidden} onSubmit={handlePasswordSubmit}
@@ -190,8 +190,7 @@ const UserProfile = () => {
                             {formErrors.form && <div className="text-red-600 text-sm font-medium mb-2">{formErrors.form}</div>}
                             {successMessage && <div className="text-green-600 text-sm font-medium mb-2">{successMessage}</div>}
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-1">Enter your current
-                                    Password</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">{t('userProfile.currentPassword')}</label>
                                 <input
                                     type='password'
                                     name="oldPassword"
@@ -203,8 +202,7 @@ const UserProfile = () => {
                                     <p className="text-red-500 text-xs font-medium mt-1">{formErrors.oldPassword}</p>}
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-1">Enter your new
-                                    Password</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">{t('userProfile.newPassword')}</label>
                                 <input
                                     type='password'
                                     name="password"
@@ -216,8 +214,7 @@ const UserProfile = () => {
                                     <p className="text-red-500 text-xs font-medium mt-1">{formErrors.password}</p>}
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-1">Confirm your new
-                                    Password</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">{t('userProfile.confirmPassword')}</label>
                                 <input
                                     type='password'
                                     name="passwordRepeat"
@@ -230,7 +227,7 @@ const UserProfile = () => {
                             </div>
                             <button type="submit" disabled={passwordLoading}
                                     className="w-full bg-indigo-600 text-white font-bold px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50">
-                                {passwordLoading ? 'Validating...' : 'Validate'}
+                                {passwordLoading ? t('userProfile.validating') : t('userProfile.validate')}
                             </button>
                         </div>
                     </form>
@@ -242,8 +239,7 @@ const UserProfile = () => {
                             {formErrors.emailForm && <div className="text-red-600 text-sm font-medium mb-2">{formErrors.emailForm}</div>}
                             {successMessage && <div className="text-green-600 text-sm font-medium mb-2">{successMessage}</div>}
                             <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-1">Enter your new
-                                    Email</label>
+                                <label className="block text-sm font-bold text-gray-700 mb-1">{t('userProfile.enterNewEmail')}</label>
                                 <input type='email'
                                        name="email"
                                        value={userEmailForm.email}
@@ -253,7 +249,7 @@ const UserProfile = () => {
                             </div>
                             <button type="submit" disabled={emailLoading}
                                     className="w-full bg-indigo-600 text-white font-bold px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50">
-                                {emailLoading ? 'Validating...' : 'Validate'}
+                                {emailLoading ? t('userProfile.validating') : t('userProfile.validate')}
                             </button>
                         </div>
                     </form>
@@ -261,22 +257,21 @@ const UserProfile = () => {
                         <button
                             onClick={() => setIsPasswordFormHidden(!isPasswordFormHidden)}
                             className="bg-indigo-600 text-white px-6 py-3 text-sm font-bold hover:bg-indigo-700 transition-colors w-full md:w-auto rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
-                            Update Password
+                            {t('userProfile.updatePassword')}
                         </button>
                         <button
                             onClick={() => setIsEmailFormHidden(!isEmailFormHidden)}
                             className="bg-indigo-600 text-white px-6 py-3 text-sm font-bold hover:bg-indigo-700 transition-colors w-full md:w-auto rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
-                            Update Email
+                            {t('userProfile.updateEmail')}
                         </button>
                     </div>
                 </Card>
 
                 {/* Previously in... Card */}
-                <Card title="Previously in...">
+                <Card title={t('userProfile.previouslyIn')}>
                     <div className="text-lg space-y-6 flex-grow">
                         <div>
-                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">Last
-                                articles read</h3>
+                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">{t('userProfile.lastArticlesRead')}</h3>
                             {lastReadArticles?.length > 0 ? (
                                 <ul className="space-y-3">
                                     {lastReadArticles.map((article) => (
@@ -287,12 +282,11 @@ const UserProfile = () => {
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 text-sm">No articles read recently.</p>
+                                <p className="text-gray-500 text-sm">{t('userProfile.noArticlesRead')}</p>
                             )}
                         </div>
                         <div className="mt-8">
-                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">Recent
-                                interactions</h3>
+                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">{t('userProfile.recentInteractions')}</h3>
                             {userData.commentedArticles?.length > 0 ? (
                                 <ul className="space-y-3">
                                     {userData.commentedArticles?.map((comment) => (
@@ -303,18 +297,17 @@ const UserProfile = () => {
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 text-sm">No recent interactions.</p>
+                                <p className="text-gray-500 text-sm">{t('userProfile.noRecentInteractions')}</p>
                             )}
                         </div>
                     </div>
                 </Card>
 
                 {/* Your Writing Card 1 */}
-                <Card title="Your writing">
+                <Card title={t('userProfile.yourWriting')}>
                     <div className="text-lg space-y-6 flex-grow">
                         <div>
-                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">Published
-                                articles</h3>
+                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">{t('userProfile.publishedArticles')}</h3>
                             {userData.articles?.filter((article) => article.published).length > 0 ? (
                                 <ul className="space-y-3">
                                     {userData.articles?.filter((article) => article.published).slice(0, 5).map((article) => (
@@ -323,17 +316,16 @@ const UserProfile = () => {
                                                 <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full mr-2 flex-shrink-0"></span>
                                                 <Link to={`/article/${article.id}`} className="text-gray-700 hover:text-indigo-600 font-medium transition-colors truncate">{article.title}</Link>
                                             </div>
-                                            <span className="text-xs text-gray-400 group-hover:text-indigo-400 whitespace-nowrap transition-colors">View &rarr;</span>
+                                            <span className="text-xs text-gray-400 group-hover:text-indigo-400 whitespace-nowrap transition-colors">{t('userProfile.view')} &rarr;</span>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 text-sm">No published articles yet.</p>
+                                <p className="text-gray-500 text-sm">{t('userProfile.noPublishedArticles')}</p>
                             )}
                         </div>
                         <div className="mt-8">
-                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">Draft
-                                articles</h3>
+                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">{t('userProfile.draftArticles')}</h3>
                             {userData.articles?.filter((article) => !article.published).length > 0 ? (
                                 <ul className="space-y-3">
                                     {userData.articles?.filter((article) => !article.published).slice(0, 5).map((draft) => (
@@ -342,12 +334,12 @@ const UserProfile = () => {
                                                 <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
                                                 <Link to={`/article/${draft.id}`} className="text-gray-700 hover:text-indigo-600 font-medium transition-colors truncate">{draft.title}</Link>
                                             </div>
-                                            <span className="text-xs text-gray-400 group-hover:text-indigo-400 whitespace-nowrap transition-colors">Edit &rarr;</span>
+                                            <span className="text-xs text-gray-400 group-hover:text-indigo-400 whitespace-nowrap transition-colors">{t('userProfile.edit')} &rarr;</span>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 text-sm">No drafts currently.</p>
+                                <p className="text-gray-500 text-sm">{t('userProfile.noDrafts')}</p>
                             )}
                         </div>
                     </div>
@@ -355,17 +347,16 @@ const UserProfile = () => {
                         <Link
                             className="bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-3 text-sm font-bold hover:bg-indigo-100 transition-colors flex-1 text-center rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             to="/userArticles">
-                            Manage All Articles
+                            {t('userProfile.manageAllArticles')}
                         </Link>
                     </div>
                 </Card>
 
                 {/* Your Favorite articles */}
-                <Card title="Favorite articles">
+                <Card title={t('userProfile.favoriteArticles')}>
                     <div className="text-lg space-y-4 flex-grow">
                         <div>
-                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">Recently
-                                saved</h3>
+                            <h3 className="mb-3 font-bold text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100 pb-2">{t('userProfile.recentlySaved')}</h3>
                             {favoriteArticles?.length > 0 ? (
                                 <ul className="space-y-3">
                                     {favoriteArticles?.slice(0, 5).map((article) => (
@@ -378,10 +369,9 @@ const UserProfile = () => {
                             ) : (
                                 <div className="text-center py-8">
                                     <span className="text-gray-300 text-4xl block mb-2">☆</span>
-                                    <p className="text-gray-500 text-sm">You haven't saved any articles yet.</p>
+                                    <p className="text-gray-500 text-sm">{t('userProfile.noFavorites')}</p>
                                 </div>
                             )}
-                            
                         </div>
                     </div>
                     {favoriteArticles?.length > 0 && (
@@ -389,7 +379,7 @@ const UserProfile = () => {
                             <Link
                                 className="bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-3 text-sm font-bold hover:bg-indigo-100 transition-colors flex-1 text-center rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 to="/favoriteArticle">
-                                View All Favorites
+                                {t('userProfile.viewAllFavorites')}
                             </Link>
                         </div>
                     )}

@@ -4,16 +4,16 @@ import {useQuery} from "@apollo/client/react";
 import {GET_AUTHOR_PROFILE} from "../../graphql/queries";
 import formatDate from "../../utils/formatDate.js";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const AuthorProfile = () => {
+    const {t} = useTranslation();
     const authorName = useParams();
 
     const {loading, error, data, fetchMore} = useQuery(GET_AUTHOR_PROFILE, {variables: {author: authorName.author, page: 1}})
-    if (loading) return <p className="text-gray-600 text-center py-20 font-medium">Loading...</p>;
+    if (loading) return <p className="text-gray-600 text-center py-20 font-medium">{t('authorProfile.loading')}</p>;
     if (error) return <p className="text-red-500 text-center py-20 font-medium">Error: {error.message}</p>;
     const authorProfile = data.userByName;
-    console.log(authorProfile)
-
 
     const handleLoadMore = () => {
         if (authorProfile?.paginatedArticles?.paginatorInfo?.hasMorePages) {
@@ -49,17 +49,17 @@ const AuthorProfile = () => {
                         </div>
                         <div>
                             <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{authorProfile.name}</h1>
-                            <p className="text-gray-500 font-medium mt-1">Member since {formatDate(authorProfile.created_at)}</p>
+                            <p className="text-gray-500 font-medium mt-1">{t('authorProfile.memberSince')} {formatDate(authorProfile.created_at)}</p>
                         </div>
                     </div>
 
                     <div className="overflow-x-auto">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Published Articles</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('authorProfile.publishedArticles')}</h2>
                         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                             <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">Title</th>
-                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">Date Published</th>
+                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">{t('authorProfile.title')}</th>
+                                <th className="text-left py-4 px-6 font-semibold text-gray-900 text-sm uppercase tracking-wider">{t('authorProfile.datePublished')}</th>
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -81,7 +81,7 @@ const AuthorProfile = () => {
                                     className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-8 rounded-lg shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     onClick={handleLoadMore}
                                 >
-                                    Load More Articles
+                                    {t('authorProfile.loadMore')}
                                 </button>
                             </div>
                         )}
