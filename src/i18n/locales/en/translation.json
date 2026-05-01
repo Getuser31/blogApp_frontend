@@ -1,6 +1,7 @@
 {
   "menu": {
     "search": "Search...",
+    "language": "Language",
     "articles": "Articles",
     "admin": "Admin",
     "profile": "Profile",

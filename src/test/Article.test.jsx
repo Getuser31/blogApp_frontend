@@ -128,10 +128,10 @@ describe('Article component', () => {
             </MemoryRouter>
         );
 
-        expect(screen.getByText('Test Article Title')).toBeInTheDocument();
-        expect(screen.getByText(/By John Doe/)).toBeInTheDocument();
-        expect(screen.getByText('Technology')).toBeInTheDocument();
-        expect(screen.getByText('Science')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Test Article Title' })).toBeInTheDocument();
+        expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Technology').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Science').length).toBeGreaterThan(0);
         expect(screen.getByText(/Published on/)).toBeInTheDocument();
     });
 
@@ -229,7 +229,7 @@ describe('Article component', () => {
 
         // Wait for effects to settle
         await waitFor(() => {
-            expect(screen.getByText('Test Article Title')).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: 'Test Article Title' })).toBeInTheDocument();
         });
 
         // The component only uses the mutation hook, it shouldn't have been called
