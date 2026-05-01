@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useMutation, useQuery } from '@apollo/client/react';
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ADD_ARTICLE, EDIT_ARTICLE } from "../../../graphql/mutations";
 import { GET_ARTICLES, GET_CATEGORIES } from "../../../graphql/queries";
 import Loading from "../../../utils/loading";
@@ -55,6 +56,7 @@ const formats = [
 ];
 
 const AddArticle = () => {
+    const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [categoryIds, setCategoryIds] = useState([]);
@@ -165,7 +167,7 @@ const AddArticle = () => {
         setValidationError("");
 
         if (!title || !content) {
-            setValidationError("Title and content are required.");
+            setValidationError(t('addArticle.titleAndContentRequired'));
             return;
         }
 
@@ -208,10 +210,10 @@ const AddArticle = () => {
                             to="/admin"
                             className="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1 mb-2 transition-colors"
                         >
-                            &larr; Back to Admin
+                            {t('addArticle.backToAdmin')}
                         </Link>
-                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Create New Article</h1>
-                        <p className="text-gray-500 font-medium text-sm mt-1">Write your next story and share it with the world</p>
+                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{t('addArticle.title')}</h1>
+                        <p className="text-gray-500 font-medium text-sm mt-1">{t('addArticle.subtitle')}</p>
                     </div>
                 </div>
 
@@ -222,14 +224,14 @@ const AddArticle = () => {
                             {/* Title Card */}
                             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <label htmlFor="title" className="block text-sm font-bold text-gray-900 mb-2">
-                                    Article Title <span className="text-red-500">*</span>
+                                    {t('addArticle.articleTitle')} <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     id="title"
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="Enter your article title..."
+                                    placeholder={t('addArticle.titlePlaceholder')}
                                     className="w-full rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 px-4 py-3 text-lg transition-colors"
                                     required
                                 />
@@ -238,7 +240,7 @@ const AddArticle = () => {
                             {/* Content Editor Card */}
                             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <label className="block text-sm font-bold text-gray-900 mb-2">
-                                    Content <span className="text-red-500">*</span>
+                                    {t('addArticle.content')} <span className="text-red-500">*</span>
                                 </label>
                                 <ReactQuill
                                     ref={quillRef}
@@ -247,7 +249,7 @@ const AddArticle = () => {
                                     onChange={setContent}
                                     modules={modules}
                                     formats={formats}
-                                    placeholder="Write your article here..."
+                                    placeholder={t('addArticle.contentPlaceholder')}
                                     className="bg-white text-gray-900 rounded-lg overflow-hidden [&_.ql-editor]:min-h-[500px] [&_.ql-toolbar]:border-gray-200 [&_.ql-container]:border-gray-200"
                                 />
                             </div>
@@ -258,12 +260,12 @@ const AddArticle = () => {
                             {/* Publish Settings Card */}
                             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                                    Publish Settings
+                                    {t('addArticle.publishSettings')}
                                 </h2>
                                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
                                     <div>
-                                        <p className="text-sm font-bold text-gray-900">Publish directly</p>
-                                        <p className="text-xs font-medium text-gray-500">Make this article visible to everyone</p>
+                                        <p className="text-sm font-bold text-gray-900">{t('addArticle.publishDirectly')}</p>
+                                        <p className="text-xs font-medium text-gray-500">{t('addArticle.publishDirectlyHint')}</p>
                                     </div>
                                     <label className="relative inline-flex items-center cursor-pointer">
                                         <input
@@ -281,7 +283,7 @@ const AddArticle = () => {
                             {/* Categories Card */}
                             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                                    Categories
+                                    {t('addArticle.categories')}
                                 </h2>
                                 <CategoryDropdown
                                     categories={categoriesData?.getCategories || []}
@@ -293,12 +295,12 @@ const AddArticle = () => {
                             {/* Images Card — Upload and insert into editor */}
                             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                 <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                                    Images
+                                    {t('addArticle.images')}
                                 </h2>
                                 <p className="text-xs font-medium text-gray-500 mb-4 leading-relaxed">
-                                    1. Upload images below<br />
-                                    2. Hover a thumbnail and click <strong className="text-gray-700">"Insert in text"</strong><br />
-                                    3. The image appears directly in the editor — you can resize it by dragging corners, or align it with the toolbar.
+                                    {t('addArticle.imageInstructions1')}<br />
+                                    {t('addArticle.imageInstructions2')}<br />
+                                    {t('addArticle.imageInstructions3')}
                                 </p>
                                 <ImageUpload
                                     onUpload={setImages}
@@ -333,10 +335,10 @@ const AddArticle = () => {
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        Submitting...
+                                        {t('addArticle.submitting')}
                                     </>
                                 ) : (
-                                    'Publish Article'
+                                    t('addArticle.publishArticle')
                                 )}
                             </button>
                         </div>
