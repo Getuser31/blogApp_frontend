@@ -91,8 +91,26 @@ export function Footer() {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-10 pt-6 border-t border-neutral-800 text-xs text-neutral-600">
+                <div className="mt-10 pt-6 border-t border-neutral-800 text-xs text-neutral-600 flex flex-col sm:flex-row items-center justify-between gap-2">
                     <p>© {new Date().getFullYear()} {t('footer.allRightsReserved')}</p>
+                    <p>
+                        Developed by{" "}
+                        <a
+                            href="https://fournet.dev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-neutral-400 hover:text-white transition-colors underline underline-offset-2"
+                        >
+                            Charles Fournet
+                        </a>{" "}
+                        &mdash;{" "}
+                        <a
+                            href="mailto:charles@fournet.dev"
+                            className="text-neutral-400 hover:text-white transition-colors underline underline-offset-2"
+                        >
+                            charles@fournet.dev
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>
