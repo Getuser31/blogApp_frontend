@@ -4,6 +4,7 @@ import {GET_ARTICLE, GET_CATEGORIES} from "../../graphql/queries.js";
 import Loading from "../../utils/loading.jsx";
 import Error from "../../utils/error.jsx";
 import {Link, useParams, useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 import {EDIT_ARTICLE, DELETE_IMAGE} from "../../graphql/mutations.js";
 import ImageUpload from "../Admin/Articles/ImageUpload.jsx";
 import ReactQuill, { Quill } from 'react-quill-new';
@@ -54,6 +55,7 @@ const formats = [
 ];
 
 const EditArticle = () => {
+    const {t} = useTranslation();
     const {id} = useParams();
     const navigate = useNavigate();
     const quillRef = useRef(null);
@@ -149,11 +151,11 @@ const EditArticle = () => {
             });
         },
         onCompleted: () => {
-            setMessage('Image deleted successfully')
+            setMessage(t('editArticle.imageDeleted'))
         },
         onError: (error) => {
             console.error("Error deleting image", error);
-            setMessage("Error deleting image")
+            setMessage(t('editArticle.errorDeletingImage'))
         }
     })
 
@@ -259,7 +261,7 @@ const EditArticle = () => {
             <div className="container mx-auto max-w-4xl">
                 <div className="mb-8">
                     <Link to="/articles" className="text-indigo-600 hover:text-indigo-800 font-medium">
-                        &larr; Back to Articles
+                        {t('editArticle.backToArticles')}
                     </Link>
                 </div>
                 <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md border border-gray-200 p-8">
@@ -280,7 +282,7 @@ const EditArticle = () => {
 
                     <div className="mb-8">
                         <label className="block text-gray-900 text-sm font-bold mb-3">
-                            Categories
+                            {t('editArticle.categories')}
                         </label>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
                             {categoriesData?.getCategories?.map((category) => (
@@ -312,7 +314,7 @@ const EditArticle = () => {
 
                     <div className="mb-6 bg-gray-50 p-6 rounded-lg border border-gray-100">
                         <p className="text-gray-600 font-medium text-sm mb-4">
-                            Upload images, then hover a thumbnail and click <strong className="text-gray-900">"Insert in text"</strong>. The image appears directly in the editor — you can resize it by dragging corners, or align it with the toolbar.
+                            {t('editArticle.imageInstructions')}
                         </p>
                         <ImageUpload
                             required={false}
@@ -326,7 +328,7 @@ const EditArticle = () => {
                             disabled={editLoading}
                             className="bg-indigo-600 text-white font-bold py-2.5 px-8 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 disabled:opacity-60 transition-colors"
                         >
-                            {editLoading ? 'Saving...' : 'Save Changes'}
+                            {editLoading ? t('editArticle.saving') : t('editArticle.saveChanges')}
                         </button>
                     </div>
                 </form>
@@ -345,17 +347,17 @@ const EditArticle = () => {
                                     type="button"
                                     onClick={() => handleInsertServerImage(image.path)}
                                     className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl cursor-pointer"
-                                    title="Insert this image into the editor"
+                                    title={t('editArticle.insertInText')}
                                 >
                                     <span className="text-white text-xs font-semibold bg-indigo-600 px-3 py-1.5 rounded-full shadow-sm">
-                                        Insert in text
+                                        {t('editArticle.insertInText')}
                                     </span>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => deleteImage(image.id)}
                                     className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold rounded-full h-8 w-8 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 hover:bg-red-700 shadow-md transition-all duration-200 focus:outline-none z-10"
-                                    title="Delete image"
+                                    title={t('editArticle.deleteImage')}
                                 >
                                     ✕
                                 </button>

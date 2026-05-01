@@ -1,7 +1,6 @@
 {
   "menu": {
     "search": "Search...",
-    "language": "Language",
     "articles": "Articles",
     "admin": "Admin",
     "profile": "Profile",
@@ -14,7 +13,6 @@
     "searchNoResultsHint": "Try a different search term"
   },
   "footer": {
-    "about": "About",
     "aboutText": "A blog dedicated to sharing insights, stories, and ideas about technology, design, and creativity.",
     "quickLinks": "Quick Links",
     "home": "Home",
@@ -25,7 +23,8 @@
     "yourEmail": "Your email",
     "loadingCategories": "Loading categories...",
     "errorLoadingCategories": "Error loading categories",
-    "allRightsReserved": "Blog App. All rights reserved."
+    "allRightsReserved": "Blog App. All rights reserved.",
+    "subscribed": "Thanks! You're subscribed. ✓"
   },
   "login": {
     "title": "Welcome back",
@@ -90,13 +89,12 @@
   },
   "userArticles": {
     "title": "Your Articles",
-    "tableTitle": "Title",
-    "tableDatePublished": "Date Published",
-    "tableStatus": "Status",
+    "datePublished": "Date Published",
+    "status": "Status",
     "published": "Published",
     "draft": "Draft",
     "noArticles": "You haven't written any articles yet.",
-    "writeFirst": "Write your first article",
+    "writeFirstArticle": "Write your first article",
     "loading": "Loading..."
   },
   "favoriteArticles": {
@@ -113,15 +111,24 @@
     "backToHome": "← Back to Home",
     "publishedOn": "Published on",
     "editArticle": "Edit Article",
-    "by": "By"
+    "by": "By",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "relatedArticles": "Related articles",
+    "reading": "Reading"
   },
   "articles": {
     "loading": "Loading articles...",
     "errorLoading": "Error loading articles",
-    "filterByCategories": "Filter By Categories",
-    "allCategories": "All Categories",
     "loadMore": "Load More Articles",
-    "readMore": "Read more →"
+    "allCategories": "All",
+    "latest": "Latest",
+    "readArticle": "Read article →"
+  },
+  "heroBanner": {
+    "title": "Another look on the actuality and the world",
+    "subtitle": "Tech & Ideas"
   },
   "editArticle": {
     "backToArticles": "← Back to Articles",
@@ -217,7 +224,6 @@
     "updateRole": "Update Role",
     "selectNewRole": "Select New Role",
     "selectARole": "Select a role",
-    "updateRoleButton": "Update Role",
     "roleUpdated": "Role updated successfully",
     "loading": "Loading user profile...",
     "userNotFound": "User not found."

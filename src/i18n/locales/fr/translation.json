@@ -1,7 +1,6 @@
 {
   "menu": {
     "search": "Rechercher...",
-    "language": "Langue",
     "articles": "Articles",
     "admin": "Admin",
     "profile": "Profil",
@@ -14,7 +13,6 @@
     "searchNoResultsHint": "Essayez un autre terme de recherche"
   },
   "footer": {
-    "about": "À propos",
     "aboutText": "Un blog dédié au partage d'idées, d'histoires et de réflexions sur la technologie, le design et la créativité.",
     "quickLinks": "Liens rapides",
     "home": "Accueil",
@@ -25,7 +23,8 @@
     "yourEmail": "Votre email",
     "loadingCategories": "Chargement des catégories...",
     "errorLoadingCategories": "Erreur de chargement des catégories",
-    "allRightsReserved": "Blog App. Tous droits réservés."
+    "allRightsReserved": "Blog App. Tous droits réservés.",
+    "subscribed": "Merci ! Vous êtes inscrit. ✓"
   },
   "login": {
     "title": "Bon retour",
@@ -90,13 +89,12 @@
   },
   "userArticles": {
     "title": "Vos articles",
-    "tableTitle": "Titre",
-    "tableDatePublished": "Date de publication",
-    "tableStatus": "Statut",
+    "datePublished": "Date de publication",
+    "status": "Statut",
     "published": "Publié",
     "draft": "Brouillon",
     "noArticles": "Vous n'avez encore écrit aucun article.",
-    "writeFirst": "Écrire votre premier article",
+    "writeFirstArticle": "Écrire votre premier article",
     "loading": "Chargement..."
   },
   "favoriteArticles": {
@@ -113,15 +111,24 @@
     "backToHome": "← Retour à l'accueil",
     "publishedOn": "Publié le",
     "editArticle": "Modifier l'article",
-    "by": "Par"
+    "by": "Par",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "copied": "Copié !",
+    "relatedArticles": "Articles similaires",
+    "reading": "Lecture"
   },
   "articles": {
     "loading": "Chargement des articles...",
     "errorLoading": "Erreur de chargement des articles",
-    "filterByCategories": "Filtrer par catégories",
-    "allCategories": "Toutes les catégories",
     "loadMore": "Charger plus d'articles",
-    "readMore": "Lire la suite →"
+    "allCategories": "Toutes",
+    "latest": "Derniers articles",
+    "readArticle": "Lire l'article →"
+  },
+  "heroBanner": {
+    "title": "Un autre regard sur l'actualité et le monde",
+    "subtitle": "Tech & Idées"
   },
   "editArticle": {
     "backToArticles": "← Retour aux articles",
@@ -217,7 +224,6 @@
     "updateRole": "Modifier le rôle",
     "selectNewRole": "Sélectionner un nouveau rôle",
     "selectARole": "Sélectionnez un rôle",
-    "updateRoleButton": "Modifier le rôle",
     "roleUpdated": "Rôle mis à jour avec succès",
     "loading": "Chargement du profil...",
     "userNotFound": "Utilisateur introuvable."
