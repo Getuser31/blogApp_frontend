@@ -52,6 +52,7 @@ const Menu = () => {
     }
 
     const isAdmin = user && user.role?.toUpperCase() === 'ADMIN';
+    const isAuthor = user && user.role?.toUpperCase() === 'AUTHOR'
     
     const handleSearch = (e) => {
         const value = e.target.value;
@@ -210,12 +211,14 @@ const Menu = () => {
                                                         </div>
                                                     </li>
                                                     <div className="my-1 border-t border-gray-100"></div>
-                                                    <li>
-                                                        <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
-                                                            <FaEdit className="text-lg text-gray-400 group-hover:text-indigo-600" />
-                                                            <Link to={'/addArticle'}> <span className="font-medium">{t('menu.writeNow')}</span> </Link>
-                                                        </div>
-                                                    </li>
+                                                    {isAuthor || isAdmin && (
+                                                        <li>
+                                                            <div className="group flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors duration-150">
+                                                                <FaEdit className="text-lg text-gray-400 group-hover:text-indigo-600" />
+                                                                <Link to={'/addArticle'}> <span className="font-medium">{t('menu.writeNow')}</span> </Link>
+                                                            </div>
+                                                        </li>
+                                                    )}
                                                 </ul>
                                             </div>
                                         )}

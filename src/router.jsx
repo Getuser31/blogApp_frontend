@@ -16,6 +16,7 @@ import FavoriteArticles from "./components/user/favoriteArticles.jsx";
 import UsersList from "./components/Admin/Users/usersList.jsx";
 import AdminUserProfile from "./components/Admin/Users/adminUserProfile.jsx";
 import AuthorProfile from "./components/author/authorProfile.jsx";
+import AuthorProtectedRoute from "./AuthorProtectedRoute.jsx";
 
 const router = createBrowserRouter([
     {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
             {path: '/userProfile', element: <UserProfile/>},
             {path: '/userArticles', element: <PublishedArticles/>},
             {path: '/favoriteArticle', element: <FavoriteArticles/>},
-            {path: "addArticle", element: <AddArticle/>},
+            {path: "addArticle", element: <AuthorProtectedRoute><AddArticle/></AuthorProtectedRoute>},
             {
                 path: "admin",
                 element: <AdminLayout/>,
