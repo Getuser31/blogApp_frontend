@@ -2,7 +2,7 @@ import React from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client/react";
 import {GET_CATEGORIES} from "../../graphql/queries.js";
-import Articles from "../articles/articles.jsx";
+import HomePage from "../articles/HomePage.jsx";
 
 const Category = () => {
     const {category} = useParams();
@@ -20,7 +20,7 @@ const Category = () => {
 
     return (
         <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <Articles categoryId={categoryId}/>
+            <HomePage categoryId={categoryId}/>
         </div>
     );
 }

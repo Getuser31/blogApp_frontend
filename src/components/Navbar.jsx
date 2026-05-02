@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import i18n from "i18next";
 import { FaBars, FaTimes, FaEdit, FaUser } from "react-icons/fa";
 import { Logo } from "./Logo.jsx";
-import { useAuth } from "../../AuthContext.jsx";
-import { SEARCH_ARTICLES } from "../../graphql/queries.js";
+import { useAuth } from "../AuthContext.jsx";
+import { SEARCH_ARTICLES } from "../graphql/queries.js";
 
 const languages = [
     { code: 'en', flag: '🇬🇧', name: 'English' },

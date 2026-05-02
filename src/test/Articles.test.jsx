@@ -26,13 +26,13 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-import Articles from '../components/articles/articles.jsx';
+import HomePage from '../components/articles/HomePage.jsx';
 
 // --- Test data builders ---
 
 const defaultArticlesData = {
-  publishedArticles: {
-    data: [
+  publishedLastArticles: {
+    articles: [
       {
         id: '1',
         title: 'First Article',
@@ -48,12 +48,7 @@ const defaultArticlesData = {
         images: [],
       },
     ],
-    paginatorInfo: {
-      currentPage: 1,
-      lastPage: 2,
-      hasMorePages: true,
-      total: 5,
-    },
+    hasMore: true,
   },
 };
 
@@ -99,7 +94,7 @@ const setupAlternatingMock = (articlesOverrides = {}, categoriesOverrides = {}) 
 
 // --- Tests ---
 
-describe('Articles component', () => {
+describe('HomePage component', () => {
   beforeEach(() => {
     mockUseQuery.mockReset();
     mockNavigate.mockReset();
@@ -114,7 +109,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -126,7 +121,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -138,7 +133,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -151,20 +146,20 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Load More Articles/)).toBeInTheDocument();
+    expect(screen.getByText(/Read More/)).toBeInTheDocument();
   });
 
   it('does not show "Load More" on last page', () => {
     const noMoreData = {
-      publishedArticles: {
-        data: [
+      publishedLastArticles: {
+        articles: [
           { id: '1', title: 'First Article', content: '<p>Content</p>', created_at: '2024-03-15T10:00:00Z', images: [] },
         ],
-        paginatorInfo: { currentPage: 1, lastPage: 1, hasMorePages: false, total: 1 },
+        hasMore: false,
       },
     };
 
@@ -172,11 +167,11 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
-    expect(screen.queryByText(/Load More Articles/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Read More/)).not.toBeInTheDocument();
   });
 
   it('navigates to article on click', async () => {
@@ -185,7 +180,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -201,7 +196,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -216,7 +211,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -225,40 +220,41 @@ describe('Articles component', () => {
     expect(allButton.className).toContain('text-neutral-900');
   });
 
-  it('calls refetch with category id when a category tag is clicked', async () => {
+  it('marks the clicked category tag as active', async () => {
     const user = userEvent.setup();
     setupAlternatingMock();
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
     const techButton = screen.getAllByRole('button').find((b) => b.textContent === 'Technology');
     await user.click(techButton);
 
-    expect(mockRefetch).toHaveBeenCalledWith({ page: 1, category_id: '1' });
+    const updatedTechBtn = screen.getAllByRole('button').find((b) => b.textContent === 'Technology');
+    expect(updatedTechBtn.className).toContain('bg-white');
   });
 
-  it('calls refetch without category when "All" tag is clicked', async () => {
+  it('resets to "All" tag as active when "All" is clicked after a category', async () => {
     const user = userEvent.setup();
     setupAlternatingMock();
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
     const techButton = screen.getAllByRole('button').find((b) => b.textContent === 'Technology');
     await user.click(techButton);
-    mockRefetch.mockClear();
 
     const allButton = screen.getAllByRole('button').find((b) => b.textContent === 'All');
     await user.click(allButton);
 
-    expect(mockRefetch).toHaveBeenCalledWith({ page: 1, category_id: undefined });
+    const updatedAllBtn = screen.getAllByRole('button').find((b) => b.textContent === 'All');
+    expect(updatedAllBtn.className).toContain('bg-white');
   });
 
   it('updates active tag styling when a category is selected', async () => {
@@ -267,7 +263,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles />
+        <HomePage />
       </MemoryRouter>
     );
 
@@ -289,7 +285,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles categoryId="1" />
+        <HomePage categoryId="1" />
       </MemoryRouter>
     );
 
@@ -313,7 +309,7 @@ describe('Articles component', () => {
 
     render(
       <MemoryRouter>
-        <Articles categoryId="2" />
+        <HomePage categoryId="2" />
       </MemoryRouter>
     );
 

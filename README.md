@@ -170,7 +170,7 @@ All translations are organized under a single namespace (`translation`). The JSO
 - `userArticles` — User's articles page
 - `favoriteArticles` — Favorite articles page
 - `article` — Single article view
-- `articles` — Articles listing
+- `articles` — HomePage listing
 - `editArticle` — Edit article page
 - `addArticle` — Add article page
 - `admin` — Admin dashboard
@@ -251,7 +251,7 @@ src/
 │   ├── Admin/
 │   │   ├── admin.jsx         # Admin dashboard
 │   │   ├── categories.jsx    # Category management
-│   │   ├── Articles/
+│   │   ├── HomePage/
 │   │   │   ├── addArticle.jsx
 │   │   │   ├── CategoryDropdown.jsx
 │   │   │   └── ImageUpload.jsx
@@ -260,7 +260,7 @@ src/
 │   │       └── usersList.jsx
 │   ├── articles/
 │   │   ├── article.jsx       # Single article view
-│   │   ├── articles.jsx      # Articles listing
+│   │   ├── HomePage.jsx      # HomePage listing
 │   │   ├── editArticle.jsx    # Edit article
 │   │   └── userArticles.jsx   # User's articles
 │   ├── author/
@@ -333,7 +333,7 @@ Tests are located in `src/test/` and use **Jest** with **React Testing Library**
 | `Login.test.jsx` | Login page and form validation |
 | `Registration.test.jsx` | Registration page and form validation |
 | `Article.test.jsx` | Single article view |
-| `Articles.test.jsx` | Articles listing with pagination |
+| `HomePage.test.jsx` | HomePage listing with pagination |
 | `GraphQL.test.js` | GraphQL query and mutation definitions |
 | `Admin.test.jsx` | Admin dashboard and management pages |
 | `Comments.test.jsx` | Comments display and form |
@@ -363,9 +363,9 @@ Routes are defined in `src/router.jsx`. The app uses React Router v6 with nested
 | Route | Component | Access |
 |-------|-----------|--------|
 | `/` | Home (articles) | Public |
-| `/articles` | Articles listing | Public |
+| `/articles` | HomePage listing | Public |
 | `/article/:id` | Single article | Public |
-| `/category/:category` | Articles by category | Public |
+| `/category/:category` | HomePage by category | Public |
 | `/author/:author` | Author profile | Public |
 | `/login` | Login | Public |
 | `/register` | Registration | Public |

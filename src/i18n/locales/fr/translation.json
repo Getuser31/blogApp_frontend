@@ -254,6 +254,14 @@
     "datePublished": "Date de publication",
     "loadMore": "Charger plus d'articles"
   },
+  "latestArticles": {
+    "title": "Derniers articles",
+    "noArticles": "Aucun article trouvé."
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
   "category": {
     "loading": "Chargement de la catégorie..."
   },

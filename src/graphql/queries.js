@@ -5,7 +5,6 @@ import {gql} from '@apollo/client';
 export const GET_ARTICLES = gql`
     query GetArticles($category_id: ID, $page: Int) {
         publishedArticles(
-            first: 10,
             page: $page,
             category_id: $category_id
         ) {
@@ -28,6 +27,26 @@ export const GET_ARTICLES = gql`
         }
     }
 `;
+
+export const GET_LAST_ARTICLES = gql`
+    query GetLastArticles($category_id: ID) {
+        publishedLastArticles(category_id: $category_id){
+            articles {
+                id
+                title
+                content
+                created_at
+                images {
+                    id
+                    path
+                }
+            }
+            hasMore
+        }
+    }
+`;
+
+
 
 export const GET_ARTICLE = gql`
     query GetArticle($id: ID!) {

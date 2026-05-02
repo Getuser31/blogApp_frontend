@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client/react";
 import { useTranslation } from "react-i18next";
-import { GET_CATEGORIES } from "../../graphql/queries.js";
+import { GET_CATEGORIES } from "../graphql/queries.js";
 
 export function Footer() {
     const { t } = useTranslation();

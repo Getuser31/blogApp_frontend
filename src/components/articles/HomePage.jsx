@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client/react";
-import { GET_ARTICLES, GET_CATEGORIES } from "../../graphql/queries.js";
-import { useNavigate } from "react-router-dom";
+import {GET_CATEGORIES, GET_LAST_ARTICLES} from "../../graphql/queries.js";
+import {Link, useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { HeroBanner } from "../Design/HeroBanner.jsx";
-import { MagazineGrid } from "../Design/MagazineGrid.jsx";
+import { HeroBanner } from "../HeroBanner.jsx";
+import { MagazineGrid } from "./MagazineGrid.jsx";
 
 const stripHtml = (html) => {
     if (!html) return "";
@@ -22,12 +22,12 @@ const toDesignArticle = (article) => ({
     slug: article.id,
 });
 
-const Articles = ({ categoryId }) => {
+const HomePage = ({ categoryId }) => {
     const { t } = useTranslation();
     const [selectedCategory, setSelectedCategory] = useState(categoryId || "");
     const [activeTopic, setActiveTopic] = useState("All");
-    const { loading, error, data, fetchMore, refetch } = useQuery(GET_ARTICLES, {
-        variables: { page: 1, category_id: selectedCategory || undefined },
+    const { loading, error, data } = useQuery(GET_LAST_ARTICLES, {
+        variables: { category_id: selectedCategory || undefined },
     });
     const { data: categoriesData } = useQuery(GET_CATEGORIES);
     const navigate = useNavigate();
@@ -36,11 +36,8 @@ const Articles = ({ categoryId }) => {
     const tags = ["All", ...categories.map((c) => c.name)];
 
     useEffect(() => {
-        if (categoryId) {
-            setSelectedCategory(categoryId);
-            refetch({ page: 1, category_id: categoryId });
-        }
-    }, [categoryId, refetch]);
+        if (categoryId) setSelectedCategory(categoryId);
+    }, [categoryId]);
 
     // Sync the active banner chip when categories load and a categoryId prop is set
     useEffect(() => {
@@ -53,41 +50,14 @@ const Articles = ({ categoryId }) => {
         setActiveTopic(tag);
         if (tag === "All") {
             setSelectedCategory("");
-            refetch({ page: 1, category_id: undefined });
         } else {
             const cat = categories.find((c) => c.name === tag);
-            if (cat) {
-                setSelectedCategory(cat.id);
-                refetch({ page: 1, category_id: cat.id });
-            }
+            if (cat) setSelectedCategory(cat.id);
         }
     };
 
     const handleReadMore = (article) => {
         navigate(`/article/${article.id}`);
-    };
-
-    const handleLoadMore = () => {
-        if (data?.publishedArticles?.paginatorInfo?.hasMorePages) {
-            fetchMore({
-                variables: {
-                    page: data.publishedArticles.paginatorInfo.currentPage + 1,
-                    category_id: selectedCategory || undefined,
-                },
-                updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prev;
-                    return {
-                        publishedArticles: {
-                            ...fetchMoreResult.publishedArticles,
-                            data: [
-                                ...prev.publishedArticles.data,
-                                ...fetchMoreResult.publishedArticles.data,
-                            ],
-                        },
-                    };
-                },
-            });
-        }
     };
 
     if (loading && !data) {
@@ -106,7 +76,8 @@ const Articles = ({ categoryId }) => {
         );
     }
 
-    const articles = data?.publishedArticles?.data ?? [];
+    const articles = data?.publishedLastArticles?.articles ?? [];
+    const hasMore = data?.publishedLastArticles?.hasMore ?? false;
     const sortedArticles = [...articles].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const designArticles = sortedArticles.map(toDesignArticle);
 
@@ -133,18 +104,21 @@ const Articles = ({ categoryId }) => {
                 />
             )}
 
-            {data?.publishedArticles?.paginatorInfo?.hasMorePages && (
-                <div className="mb-10 flex justify-center">
-                    <button
-                        className="bg-neutral-900 hover:bg-neutral-700 text-white font-medium py-2.5 px-8 rounded-lg shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
-                        onClick={handleLoadMore}
+            {hasMore && (
+                <div className="flex justify-end pb-16 pr-6">
+                    <Link
+                        to={`/latestArticles${selectedCategory ? `?category_id=${selectedCategory}` : ''}`}
+                        className="inline-flex items-center space-x-1 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-300"
                     >
-                        {t('articles.loadMore')}
-                    </button>
+                        <span>Read More</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
             )}
         </div>
     );
 };
 
-export default Articles;
+export default HomePage;

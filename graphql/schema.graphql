@@ -28,6 +28,12 @@ type ArticlePaginator {
     paginatorInfo: PaginatorInfo!
 }
 
+"Last Article published"
+type LastArticleResponse {
+    articles: [Article!]!
+    hasMore: Boolean!
+}
+
 "An image for an article."
 type Image {
     id: ID!

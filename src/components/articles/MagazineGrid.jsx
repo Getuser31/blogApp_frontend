@@ -1,10 +1,3 @@
-// MagazineGrid.jsx
-// Featured article left column + latest articles sidebar right
-// Props:
-//   featured: article object (see FeaturedArticle.jsx)
-//   latest: article[] — list for sidebar (4–6 recommended)
-//   onReadMore: (article) => void
-
 import { useTranslation } from "react-i18next";
 import { FeaturedArticle } from "./FeaturedArticle.jsx";
 import { ArticleCard } from "./ArticleCard.jsx";

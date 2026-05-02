@@ -17,6 +17,7 @@ import UsersList from "./components/Admin/Users/usersList.jsx";
 import AdminUserProfile from "./components/Admin/Users/adminUserProfile.jsx";
 import AuthorProfile from "./components/author/authorProfile.jsx";
 import AuthorProtectedRoute from "./AuthorProtectedRoute.jsx";
+import LatestArticles from "./components/articles/LatestArticles.jsx";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
             {path: '/userProfile', element: <UserProfile/>},
             {path: '/userArticles', element: <PublishedArticles/>},
             {path: '/favoriteArticle', element: <FavoriteArticles/>},
+            {path: '/latestArticles', element: <LatestArticles/>},
             {path: "addArticle", element: <AuthorProtectedRoute><AddArticle/></AuthorProtectedRoute>},
             {
                 path: "admin",
